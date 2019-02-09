@@ -1,7 +1,8 @@
 [package]
 name = "peacock"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Marshall Bowers <elliott.codes@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+sfml = "0.14.0"
