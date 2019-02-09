@@ -1,12 +1,13 @@
+pub mod error;
+pub mod graphics;
+
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
-use sfml::graphics::Color;
 use sfml::graphics::{RenderTarget, RenderWindow};
 use sfml::window::{Event, Style};
 
-pub mod error;
-pub mod graphics;
+use crate::graphics::Color;
 
 use self::error::Result;
 
