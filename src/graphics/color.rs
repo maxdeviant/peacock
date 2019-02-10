@@ -1,5 +1,6 @@
 use sfml::graphics::Color as SfColor;
 
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub struct Color {
     pub r: u8,
     pub g: u8,
