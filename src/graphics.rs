@@ -1,10 +1,13 @@
 mod sprite_batch;
+mod texture_atlas;
 
 pub use sfml::graphics::{Color, IntRect, Texture};
 
+pub use self::sprite_batch::*;
+pub use self::texture_atlas::*;
+
 use sfml::graphics::RenderTarget;
 
-pub use self::sprite_batch::*;
 use crate::Context;
 
 /// Clears the screen using the given [`Color`].
