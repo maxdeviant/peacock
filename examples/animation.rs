@@ -1,8 +1,7 @@
-use peacock::error::Result;
-use peacock::graphics::{self, Animation, Color, IntRect, Texture, View};
+use peacock::graphics::{self, Animation, IntRect, Texture, View};
 use peacock::window;
 use peacock::Vector2f;
-use peacock::{Context, ContextBuilder, State};
+use peacock::{Context, ContextBuilder, Result, State};
 
 struct GameState {
     animation: Animation,

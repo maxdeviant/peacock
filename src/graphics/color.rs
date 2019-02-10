@@ -5,7 +5,7 @@ use sfml::graphics::Color as SfColor;
 pub struct Color {
     /// The red component.
     pub r: u8,
-    
+
     /// The green component.
     pub g: u8,
 

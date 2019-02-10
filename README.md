@@ -45,18 +45,17 @@ For other platforms check out the [`rust-sfml`](https://github.com/jeremyletang/
 ## Usage
 
 ```rust
-use peacock::error::Result;
 use peacock::graphics::{self, Color};
-use peacock::{Context, ContextBuilder, State};
+use peacock::{Context, ContextBuilder, Result, State};
 
 struct GameState;
 
 impl State for GameState {
-    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, ctx: &mut Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: &mut Context, dt: f64) -> Result<()> {
         Ok(())
     }
 }

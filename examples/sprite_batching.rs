@@ -1,8 +1,7 @@
-use peacock::error::Result;
-use peacock::graphics::{self, Color, IntRect, Sprite, SpriteBatch, Texture, Transformable};
+use peacock::graphics::{self, IntRect, Sprite, SpriteBatch, Texture, Transformable};
 use peacock::time;
 use peacock::window;
-use peacock::{Context, ContextBuilder, State};
+use peacock::{Context, ContextBuilder, Result, State};
 
 struct GameState {
     sprite_sheet: Texture,

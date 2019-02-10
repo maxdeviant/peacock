@@ -1,5 +1,4 @@
-use peacock::error::Result;
-use peacock::graphics::{self, Color};
+use peacock::Result;
 use peacock::{Context, ContextBuilder, State};
 
 struct GameState;
@@ -9,7 +8,7 @@ impl State for GameState {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, _ctx: &mut Context, _dt: f64) -> Result<()> {
         Ok(())
     }
 }
