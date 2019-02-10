@@ -1,11 +1,11 @@
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
-use sfml::graphics::{RenderTarget, RenderWindow};
+use sfml::graphics::RenderWindow;
 use sfml::window::{Event, Style};
 
 use crate::error::Result;
-use crate::graphics::Color;
+use crate::graphics::{self, Color};
 use crate::time;
 use crate::State;
 
@@ -57,7 +57,7 @@ impl Context {
 
             let dt = time::duration_to_f64(lag) / time::duration_to_f64(self.tick_rate);
 
-            self.window.clear(&Color::MAGENTA);
+            graphics::clear(self, &Color::MAGENTA);
 
             if let Err(err) = state.draw(self, dt) {
                 self.is_running = false;
