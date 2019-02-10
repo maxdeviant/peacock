@@ -57,7 +57,7 @@ impl Context {
 
             let dt = time::duration_to_f64(lag) / time::duration_to_f64(self.tick_rate);
 
-            graphics::clear(self, &Color::MAGENTA);
+            graphics::clear(self, &Color::CORNFLOWER_BLUE);
 
             if let Err(err) = state.draw(self, dt) {
                 self.is_running = false;
