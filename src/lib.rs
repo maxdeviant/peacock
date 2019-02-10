@@ -13,6 +13,7 @@
 
 pub mod error;
 pub mod graphics;
+pub mod input;
 pub mod time;
 pub mod window;
 
