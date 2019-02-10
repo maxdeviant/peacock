@@ -56,6 +56,26 @@ Up until recently I was using [`ggez`](http://ggez.rs) for my games, but it got 
 
 This got me thinking about what it is that I really want in a Rust game engine. After some thought, I think what it really comes down to is control. I want to be able to build games the way I want to without worrying about hitching my cart to an engine that goes down a direction that doesn't align with my goals.
 
+## Goals
+
+- Safety
+  - We're using Rust, so we want things to be safe
+  - Some of our libraries make this difficult:
+    - SFML's C bindings are unsafe
+    - Peacock doesn't directly depend on it (yet), but in userland `specs` likes to panic a lot
+- "Batteries Included"
+  - Peacock should have everything in it that allows you to get games off the ground fast
+  - This may mean including things that aren't generic enough for _every_ game (e.g., input, pathfinding, etc.)
+    - We may be able to investigate making things modular here, but we don't want to overdo it and turn into [Piston](https://www.piston.rs/)
+- Consistent APIs
+
+### Non-Goals
+
+Things that I don't care about at this juncture:
+
+- Targeting web and mobile devices
+- 3D support
+
 ## Prior Art
 
 Here are some of the engines that have served as inspiration for Peacock:
