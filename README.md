@@ -33,7 +33,7 @@ peacock = { git = "https://github.com/maxdeviant/peacock" }
 
 Peacock is built on top of [SFML](https://www.sfml-dev.org/), so you will need to install the SFML libraries for your platform.
 
-If you're running an Ubuntu-based Linux distrobution you can (most likely) do the following:
+If you're running an Ubuntu-based Linux distribution you can (most likely) do the following:
 
 ```sh
 sudo apt install lib-sfmldev
