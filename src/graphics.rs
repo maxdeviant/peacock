@@ -1,6 +1,7 @@
 mod sprite_batch;
 
-pub use sfml::graphics::Color;
+pub use sfml::graphics::{Color, IntRect, Texture};
+
 use sfml::graphics::RenderTarget;
 
 pub use self::sprite_batch::*;
