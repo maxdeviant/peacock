@@ -1,7 +1,7 @@
 use peacock::error::Result;
-use peacock::graphics::{
-    self, Color, IntRect, RenderTarget, Sprite, SpriteBatch, Texture, Transformable,
-};
+use peacock::graphics::{self, Color, IntRect, Sprite, SpriteBatch, Texture, Transformable};
+use peacock::time;
+use peacock::window;
 use peacock::{Context, ContextBuilder, State};
 
 struct GameState {
@@ -25,9 +25,6 @@ impl State for GameState {
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         graphics::clear(ctx, &Color::BLACK);
 
-        use sfml::graphics::View;
-        use sfml::system::Vector2f;
-
         let mut sprite_batch = SpriteBatch::new(&self.sprite_sheet);
 
         for x in 0..100 {
@@ -39,12 +36,12 @@ impl State for GameState {
             }
         }
 
-        ctx.window.draw(&sprite_batch);
+        graphics::draw(ctx, &sprite_batch);
 
-        ctx.window.set_title(&format!(
-            "Sprite Batching - {:.0} FPS",
-            peacock::get_fps(ctx)
-        ));
+        window::set_title(
+            ctx,
+            &format!("Sprite Batching - {:.0} FPS", time::get_fps(ctx)),
+        );
 
         Ok(())
     }
