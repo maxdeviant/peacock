@@ -2,7 +2,7 @@ mod sprite_batch;
 mod texture_atlas;
 
 pub use sfml::graphics::{
-    Color, Drawable, IntRect, RenderTarget, Sprite, Texture, Transformable, ViewRef,
+    Color, Drawable, IntRect, RenderTarget, Sprite, Texture, Transformable, View, ViewRef,
 };
 
 pub use self::sprite_batch::*;

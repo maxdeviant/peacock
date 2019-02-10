@@ -18,6 +18,8 @@ pub mod window;
 
 mod context;
 
+pub use sfml::system::{Vector2f, Vector2i, Vector2u, Vector3f, Vector3i};
+
 pub use crate::context::*;
 pub use crate::error::Result;
 
