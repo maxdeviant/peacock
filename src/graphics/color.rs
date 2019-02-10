@@ -1,15 +1,24 @@
 use sfml::graphics::Color as SfColor;
 
+/// An RGBA color.
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub struct Color {
+    /// The red component.
     pub r: u8,
+    
+    /// The green component.
     pub g: u8,
+
+    /// The blue component.
     pub b: u8,
+
+    /// The alpha component.
     pub a: u8,
 }
 
 macro_rules! predefined_rgb {
     ($name:ident, $r:expr, $g:expr, $b:expr) => {
+        /// A predefined RGB [`Color`].
         pub const $name: Self = Self {
             r: $r,
             g: $g,
@@ -21,6 +30,7 @@ macro_rules! predefined_rgb {
 
 macro_rules! predefined_rgba {
     ($name:ident, $r:expr, $g:expr, $b:expr, $a:expr) => {
+        /// A predefined RGBA [`Color`].
         pub const $name: Self = Self {
             r: $r,
             g: $g,
@@ -31,10 +41,12 @@ macro_rules! predefined_rgba {
 }
 
 impl Color {
+    /// Creates a new [`Color`] with RGB components.
     pub fn rgb(r: u8, g: u8, b: u8) -> Self {
         Self { r, g, b, a: 255 }
     }
 
+    /// Creates a new [`Color`] with RGBA components.
     pub fn rgba(r: u8, g: u8, b: u8, a: u8) -> Self {
         Self { r, g, b, a }
     }
