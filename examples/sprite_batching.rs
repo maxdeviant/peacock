@@ -23,8 +23,6 @@ impl State for GameState {
     }
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
-        graphics::clear(ctx, &Color::BLACK);
-
         let mut sprite_batch = SpriteBatch::new(&self.sprite_sheet);
 
         for x in 0..100 {

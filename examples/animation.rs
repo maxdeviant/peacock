@@ -36,8 +36,6 @@ impl State for GameState {
     }
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
-        graphics::clear(ctx, &Color::rgb(100, 149, 237));
-
         let mut view = View::new(Vector2f::new(0.0, 0.0), Vector2f::new(1920.0, 1080.0));
         view.zoom(0.25);
 

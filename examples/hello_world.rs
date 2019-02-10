@@ -10,7 +10,6 @@ impl State for GameState {
     }
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
-        graphics::clear(ctx, &Color::CORNFLOWER_BLUE);
         Ok(())
     }
 }
