@@ -91,6 +91,7 @@ pub struct ContextBuilder<'a> {
     height: i32,
     vsync: bool,
     tick_rate: f64,
+    fullscreen: bool,
     quit_on_escape: bool,
 }
 
@@ -114,11 +115,22 @@ impl<'a> ContextBuilder<'a> {
         self
     }
 
+    pub fn fullscreen(&mut self, fullscreen: bool) -> &mut Self {
+        self.fullscreen = fullscreen;
+        self
+    }
+
     pub fn build(&self) -> Result<Context> {
+        let window_style = if self.fullscreen {
+            Style::FULLSCREEN
+        } else {
+            Style::CLOSE
+        };
+
         let mut window = RenderWindow::new(
             (self.width as u32, self.height as u32),
             self.title,
-            Style::CLOSE,
+            window_style,
             &Default::default(),
         );
 
@@ -144,6 +156,7 @@ impl<'a> Default for ContextBuilder<'a> {
             height: 600,
             vsync: true,
             tick_rate: 1.0 / 60.0,
+            fullscreen: false,
             quit_on_escape: true,
         }
     }
