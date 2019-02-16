@@ -5,10 +5,13 @@ mod sprite_batch;
 mod text;
 mod texture_atlas;
 
-use sfml::graphics::{
-    Font as SfFont, RenderStates as SfRenderStates, Text as SfText, Transform as SfTransform,
+pub use sfml::graphics::{
+    Color as SfColor, IntRect, Sprite, Texture, Transformable, VertexArray, View, ViewRef,
 };
-pub use sfml::graphics::{IntRect, Sprite, Texture, Transformable, VertexArray, View, ViewRef};
+use sfml::graphics::{
+    Font as SfFont, RenderStates as SfRenderStates, RenderTarget, Text as SfText,
+    Transform as SfTransform,
+};
 
 pub use self::animation::*;
 pub use self::color::*;
@@ -24,8 +27,8 @@ pub trait Drawable {
 }
 
 /// Clears the screen using the given [`Color`].
-pub fn clear(ctx: &mut Context, color: &Color) {
-    ctx.window.clear(&color.into());
+pub fn clear(ctx: &mut Context, color: Color) {
+    ctx.window.clear(&SfColor::from(color));
 }
 
 /// Draws a [`Drawable`] object to the current render target.

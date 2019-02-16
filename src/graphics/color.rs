@@ -195,8 +195,8 @@ impl Color {
     predefined_rgb!(YELLOW, 255, 255, 0);
 }
 
-impl From<Color> for SfColor {
-    fn from(color: Color) -> Self {
+impl From<SfColor> for Color {
+    fn from(color: SfColor) -> Self {
         Self {
             r: color.r,
             g: color.g,
@@ -206,8 +206,8 @@ impl From<Color> for SfColor {
     }
 }
 
-impl From<&Color> for SfColor {
-    fn from(color: &Color) -> Self {
+impl From<Color> for SfColor {
+    fn from(color: Color) -> Self {
         Self {
             r: color.r,
             g: color.g,
