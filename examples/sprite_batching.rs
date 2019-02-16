@@ -1,4 +1,4 @@
-use peacock::graphics::{self, IntRect, Sprite, SpriteBatch, Texture, Transformable};
+use peacock::graphics::{self, Rectangle, Sprite, SpriteBatch, Texture, Transformable};
 use peacock::time;
 use peacock::window;
 use peacock::{Context, ContextBuilder, Result, State};
@@ -28,7 +28,7 @@ impl State for GameState {
             for y in 0..100 {
                 let mut sprite = Sprite::new();
                 sprite.set_position((x as f32 * 16.0, y as f32 * 16.0));
-                sprite.set_texture_rect(&IntRect::new(131, 173, 14, 19));
+                sprite.set_texture_rect(&Rectangle::<i32>::new(131, 173, 14, 19).into());
                 sprite_batch.draw_sprite(&sprite);
             }
         }

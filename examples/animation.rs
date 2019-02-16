@@ -1,4 +1,4 @@
-use peacock::graphics::{self, Animation, IntRect, Texture, View};
+use peacock::graphics::{self, Animation, Rectangle, Texture, View};
 use peacock::window;
 use peacock::{Context, ContextBuilder, Result, State};
 
@@ -14,10 +14,10 @@ impl GameState {
         let animation = Animation::new(
             sprite_sheet,
             vec![
-                IntRect::new(128, 76, 15, 20),
-                IntRect::new(144, 76, 15, 20),
-                IntRect::new(160, 76, 15, 20),
-                IntRect::new(176, 76, 15, 20),
+                Rectangle::<i32>::new(128, 76, 15, 20),
+                Rectangle::<i32>::new(144, 76, 15, 20),
+                Rectangle::<i32>::new(160, 76, 15, 20),
+                Rectangle::<i32>::new(176, 76, 15, 20),
             ],
             8,
         );

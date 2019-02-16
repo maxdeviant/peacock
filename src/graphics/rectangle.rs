@@ -1,7 +1,9 @@
 use std::ops::Add;
 
+use sfml::graphics::IntRect as SfIntRect;
+
 /// A rectangle.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Rectangle<T> {
     pub x: T,
     pub y: T,
@@ -12,7 +14,7 @@ pub struct Rectangle<T> {
 impl<T> Rectangle<T>
 where
     T: Copy + Add<Output = T>,
-{   
+{
     /// Creates a new [`Rectangle`].
     pub fn new(x: T, y: T, width: T, height: T) -> Self {
         Self {
@@ -37,5 +39,11 @@ where
 
     pub fn bottom(&self) -> T {
         self.y + self.height
+    }
+}
+
+impl From<Rectangle<i32>> for SfIntRect {
+    fn from(rectangle: Rectangle<i32>) -> Self {
+        SfIntRect::new(rectangle.x, rectangle.y, rectangle.width, rectangle.height)
     }
 }
