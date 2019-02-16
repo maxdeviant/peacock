@@ -1,16 +1,18 @@
 mod animation;
 mod color;
 mod font;
+mod rectangle;
 mod sprite_batch;
 mod text;
 mod texture;
 mod texture_atlas;
 
-pub use sfml::graphics::{IntRect, Sprite, Transformable, View, ViewRef};
+pub use sfml::graphics::{Sprite, Transformable, View, ViewRef};
 
 pub use self::animation::*;
 pub use self::color::*;
 pub use self::font::*;
+pub use self::rectangle::*;
 pub use self::sprite_batch::*;
 pub use self::text::*;
 pub use self::texture::*;
