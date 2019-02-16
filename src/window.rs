@@ -1,5 +1,7 @@
-use crate::graphics::{RenderTarget, ViewRef};
+use crate::graphics::ViewRef;
 use crate::Context;
+
+use sfml::graphics::RenderTarget;
 
 /// Sets the title of the window.
 pub fn set_title(ctx: &mut Context, title: &str) {

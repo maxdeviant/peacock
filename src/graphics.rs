@@ -8,9 +8,7 @@ mod texture_atlas;
 use sfml::graphics::{
     Font as SfFont, RenderStates as SfRenderStates, Text as SfText, Transform as SfTransform,
 };
-pub use sfml::graphics::{
-    IntRect, RenderTarget, Sprite, Texture, Transformable, VertexArray, View, ViewRef,
-};
+pub use sfml::graphics::{IntRect, Sprite, Texture, Transformable, VertexArray, View, ViewRef};
 
 pub use self::animation::*;
 pub use self::color::*;
