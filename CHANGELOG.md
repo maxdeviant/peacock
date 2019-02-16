@@ -12,7 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added animation support with `Animation`
 - Added all of the [X11 web colors](https://en.wikipedia.org/wiki/Web_colors#X11_color_names) as constants on `Color`
 - Added `graphics::clear` for clearing the screen
-- Added `graphics::draw` for drawing to the screen
+- Added `Drawable` trait for objects that can be drawn to the screen
+- Added `graphics::draw` for drawing `Drawable`s to the screen
+- Added `graphics::draw_sprite` for drawing a sprite to the screen
+- Added `graphics::draw_text` for drawing text to the screen
 - Added `window::set_title` for setting the window title
 - Added `window::set_view` for setting the view on the window
 
