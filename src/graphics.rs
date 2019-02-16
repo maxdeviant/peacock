@@ -40,8 +40,10 @@ pub fn draw_sprite(ctx: &mut Context, sprite: &Sprite) {
     ctx.window.draw_sprite(sprite, SfRenderStates::default())
 }
 
+/// The parameters for drawing [`Text`] to the current render target.
 #[derive(Debug, Default)]
 pub struct DrawTextParams {
+    /// The position at which to draw the [`Text`].
     pub position: Vector2f,
 }
 
