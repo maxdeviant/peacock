@@ -1,4 +1,4 @@
-use crate::graphics::{self, Drawable, IntRect, Sprite, Texture};
+use crate::graphics::{self, DrawSpriteParams, Drawable, IntRect, Sprite, Texture};
 use crate::Context;
 
 #[derive(Debug)]
@@ -48,6 +48,6 @@ impl Drawable for Animation {
         let mut sprite = Sprite::with_texture(&self.texture);
         sprite.set_texture_rect(&self.frames[self.current_frame]);
 
-        graphics::draw_sprite(ctx, &sprite)
+        graphics::draw_sprite(ctx, &sprite, DrawSpriteParams::default())
     }
 }

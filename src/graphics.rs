@@ -35,9 +35,24 @@ pub fn draw(ctx: &mut Context, drawable: &Drawable) {
     drawable.draw(ctx)
 }
 
+/// The parameters for drawing a [`Sprite`] to the current render target.
+#[derive(Debug, Default)]
+pub struct DrawSpriteParams {
+    /// The position at which to draw the [`Sprite`].
+    pub position: Vector2f,
+}
+
 /// Draws a [`Sprite`] to the current render target.
-pub fn draw_sprite(ctx: &mut Context, sprite: &Sprite) {
-    ctx.window.draw_sprite(sprite, SfRenderStates::default())
+pub fn draw_sprite(ctx: &mut Context, sprite: &Sprite, params: DrawSpriteParams) {
+    let mut transform = SfTransform::IDENTITY;
+    transform.translate(params.position.x, params.position.y);
+    ctx.window.draw_sprite(
+        sprite,
+        SfRenderStates {
+            transform,
+            ..Default::default()
+        },
+    )
 }
 
 /// The parameters for drawing [`Text`] to the current render target.
