@@ -33,11 +33,25 @@ peacock = { git = "https://github.com/maxdeviant/peacock" }
 
 Peacock is built on top of [SFML](https://www.sfml-dev.org/), so you will need to install the SFML libraries for your platform.
 
+#### Linux (Ubuntu-based)
+
 If you're running an Ubuntu-based Linux distribution you can (most likely) do the following:
 
 ```sh
 sudo apt install libsfml-dev
 sudo apt install libcsfml-dev
+```
+
+#### macOS
+
+Before following these instructions make sure you have [Homebrew](https://brew.sh/) installed.
+
+```sh
+brew install sfml
+brew install csfml
+
+export LIBRARY_PATH=/usr/local/lib
+export DYLD_LIBRARY_PATH=/usr/local/lib
 ```
 
 For other platforms check out the [`rust-sfml`](https://github.com/jeremyletang/rust-sfml) docs.
