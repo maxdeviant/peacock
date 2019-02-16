@@ -36,8 +36,8 @@ Peacock is built on top of [SFML](https://www.sfml-dev.org/), so you will need t
 If you're running an Ubuntu-based Linux distribution you can (most likely) do the following:
 
 ```sh
-sudo apt install lib-sfmldev
-sudo apt install lib-csfmldev
+sudo apt install libsfml-dev
+sudo apt install libcsfml-dev
 ```
 
 For other platforms check out the [`rust-sfml`](https://github.com/jeremyletang/rust-sfml) docs.
