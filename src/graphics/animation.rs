@@ -45,7 +45,7 @@ impl Animation {
 
 impl Drawable for Animation {
     fn draw(&self, ctx: &mut Context) {
-        let mut sprite = Sprite::with_texture(&self.texture);
+        let mut sprite = Sprite::with_texture(&self.texture.texture);
         sprite.set_texture_rect(&self.frames[self.current_frame]);
 
         graphics::draw_sprite(ctx, &sprite, DrawSpriteParams::default())

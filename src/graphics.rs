@@ -3,15 +3,17 @@ mod color;
 mod font;
 mod sprite_batch;
 mod text;
+mod texture;
 mod texture_atlas;
 
-pub use sfml::graphics::{IntRect, Sprite, Texture, Transformable, VertexArray, View, ViewRef};
+pub use sfml::graphics::{IntRect, Sprite, Transformable, VertexArray, View, ViewRef};
 
 pub use self::animation::*;
 pub use self::color::*;
 pub use self::font::*;
 pub use self::sprite_batch::*;
 pub use self::text::*;
+pub use self::texture::*;
 pub use self::texture_atlas::*;
 
 use sfml::graphics::{
@@ -82,7 +84,7 @@ pub(crate) fn draw_vertex_array(ctx: &mut Context, vertex_array: &VertexArray, t
     ctx.window.draw_vertex_array(
         vertex_array,
         SfRenderStates {
-            texture: Some(&texture),
+            texture: Some(&texture.texture),
             ..Default::default()
         },
     )

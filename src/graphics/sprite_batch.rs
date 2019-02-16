@@ -1,7 +1,7 @@
-use sfml::graphics::{PrimitiveType, Sprite, Texture, Transformable, VertexArray};
+use sfml::graphics::{PrimitiveType, Sprite, Transformable, VertexArray};
 use sfml::system::Vector2f;
 
-use crate::graphics::{self, Drawable};
+use crate::graphics::{self, Drawable, Texture};
 use crate::Context;
 
 pub struct SpriteBatch<'t> {
@@ -60,6 +60,6 @@ impl<'t> SpriteBatch<'t> {
 
 impl<'t> Drawable for SpriteBatch<'t> {
     fn draw(&self, ctx: &mut Context) {
-        graphics::draw_vertex_array(ctx, &self.vertices, &self.texture)
+        graphics::draw_vertex_array(ctx, &self.vertices, self.texture)
     }
 }
