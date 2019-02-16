@@ -5,8 +5,7 @@ mod texture_atlas;
 
 use sfml::graphics::RenderStates as SfRenderStates;
 pub use sfml::graphics::{
-    Drawable as SfDrawable, IntRect, RenderTarget, Sprite, Texture, Transformable, VertexArray,
-    View, ViewRef,
+    IntRect, RenderTarget, Sprite, Texture, Transformable, VertexArray, View, ViewRef,
 };
 
 pub use self::animation::*;
