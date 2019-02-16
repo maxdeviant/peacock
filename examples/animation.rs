@@ -1,6 +1,5 @@
 use peacock::graphics::{self, Animation, IntRect, Texture, View};
 use peacock::window;
-use peacock::Vector2f;
 use peacock::{Context, ContextBuilder, Result, State};
 
 struct GameState {
@@ -35,7 +34,7 @@ impl State for GameState {
     }
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
-        let mut view = View::new(Vector2f::new(0.0, 0.0), Vector2f::new(1920.0, 1080.0));
+        let mut view = View::new((0.0, 0.0).into(), (1920.0, 1080.0).into());
         view.zoom(0.25);
 
         window::set_view(ctx, &view);

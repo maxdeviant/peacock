@@ -18,11 +18,11 @@ pub mod time;
 pub mod window;
 
 mod context;
-
-pub use sfml::system::{Vector2f, Vector2i, Vector2u, Vector3f, Vector3i};
+mod vector2;
 
 pub use crate::context::*;
 pub use crate::error::Result;
+pub use crate::vector2::*;
 
 pub trait State {
     fn update(&mut self, ctx: &mut Context) -> Result<()>;
