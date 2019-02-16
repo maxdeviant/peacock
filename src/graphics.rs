@@ -6,7 +6,7 @@ mod text;
 mod texture;
 mod texture_atlas;
 
-pub use sfml::graphics::{IntRect, Sprite, Transformable, VertexArray, View, ViewRef};
+pub use sfml::graphics::{IntRect, Sprite, Transformable, View, ViewRef};
 
 pub use self::animation::*;
 pub use self::color::*;
@@ -18,7 +18,7 @@ pub use self::texture_atlas::*;
 
 use sfml::graphics::{
     Color as SfColor, Font as SfFont, RenderStates as SfRenderStates, RenderTarget, Text as SfText,
-    Transform as SfTransform,
+    Transform as SfTransform, VertexArray,
 };
 
 use crate::{Context, Vector2f};
