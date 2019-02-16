@@ -1,7 +1,8 @@
-use crate::graphics::{self, Drawable};
-use crate::Context;
 use sfml::graphics::{PrimitiveType, Sprite, Texture, Transformable, VertexArray};
 use sfml::system::Vector2f;
+
+use crate::graphics::{self, Drawable};
+use crate::Context;
 
 pub struct SpriteBatch<'t> {
     texture: &'t Texture,
