@@ -1,6 +1,6 @@
-use peacock::graphics::{self, Font, Text};
+use peacock::graphics::{self, DrawTextParams, Font, Text};
 use peacock::Result;
-use peacock::{Context, ContextBuilder, State};
+use peacock::{Context, ContextBuilder, State, Vector2f};
 
 struct GameState {
     font: Font,
@@ -26,7 +26,13 @@ impl State for GameState {
             &self.font,
             24,
         );
-        graphics::draw_text(ctx, &text);
+        graphics::draw_text(
+            ctx,
+            &text,
+            DrawTextParams {
+                position: Vector2f::new(10.0, 10.0),
+            },
+        );
 
         Ok(())
     }

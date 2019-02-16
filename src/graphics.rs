@@ -5,10 +5,11 @@ mod sprite_batch;
 mod text;
 mod texture_atlas;
 
-use sfml::graphics::RenderStates as SfRenderStates;
+use sfml::graphics::{
+    Font as SfFont, RenderStates as SfRenderStates, Text as SfText, Transform as SfTransform,
+};
 pub use sfml::graphics::{
-    Font as SfFont, IntRect, RenderTarget, Sprite, Text as SfText, Texture, Transformable,
-    VertexArray, View, ViewRef,
+    IntRect, RenderTarget, Sprite, Texture, Transformable, VertexArray, View, ViewRef,
 };
 
 pub use self::animation::*;
@@ -18,7 +19,7 @@ pub use self::sprite_batch::*;
 pub use self::text::*;
 pub use self::texture_atlas::*;
 
-use crate::Context;
+use crate::{Context, Vector2f};
 
 pub trait Drawable {
     fn draw(&self, context: &mut Context);
@@ -39,11 +40,24 @@ pub fn draw_sprite(ctx: &mut Context, sprite: &Sprite) {
     ctx.window.draw_sprite(sprite, SfRenderStates::default())
 }
 
+#[derive(Debug, Default)]
+pub struct DrawTextParams {
+    pub position: Vector2f,
+}
+
 /// Draws some [`Text`] to the current render target.
-pub fn draw_text(ctx: &mut Context, text: &Text) {
+pub fn draw_text(ctx: &mut Context, text: &Text, params: DrawTextParams) {
     let font: SfFont = text.font.into();
     let text = SfText::new(text.string, &font, text.size);
-    ctx.window.draw_text(&text, SfRenderStates::default())
+    let mut transform = SfTransform::IDENTITY;
+    transform.translate(params.position.x, params.position.y);
+    ctx.window.draw_text(
+        &text,
+        SfRenderStates {
+            transform,
+            ..Default::default()
+        },
+    )
 }
 
 /// Draws a [`VertexArray`] to the current render target.
