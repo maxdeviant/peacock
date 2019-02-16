@@ -1,5 +1,5 @@
-use crate::graphics::{IntRect, Sprite, Texture};
-use sfml::graphics::{Drawable, RenderStates, RenderTarget};
+use crate::graphics::{self, Drawable, IntRect, Sprite, Texture};
+use crate::Context;
 
 #[derive(Debug)]
 pub struct Animation {
@@ -44,14 +44,10 @@ impl Animation {
 }
 
 impl Drawable for Animation {
-    fn draw<'a: 'shader, 'texture, 'shader, 'shader_texture>(
-        &'a self,
-        target: &mut RenderTarget,
-        states: RenderStates<'texture, 'shader, 'shader_texture>,
-    ) {
+    fn draw(&self, ctx: &mut Context) {
         let mut sprite = Sprite::with_texture(&self.texture);
         sprite.set_texture_rect(&self.frames[self.current_frame]);
 
-        target.draw(&sprite);
+        graphics::draw_sprite(ctx, &sprite)
     }
 }
