@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `Vector2`
 - Added animation support with `Animation`
 - Added all of the [X11 web colors](https://en.wikipedia.org/wiki/Web_colors#X11_color_names) as constants on `Color`
 - Added `graphics::clear` for clearing the screen
