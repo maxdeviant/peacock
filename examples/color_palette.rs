@@ -204,7 +204,7 @@ impl State for GameState {
 }
 
 fn main() -> Result<()> {
-    let mut context = ContextBuilder::new("Colors", 384, 384).build()?;
+    let mut context = ContextBuilder::new("Color Palette", 384, 384).build()?;
     let mut game_state = GameState::new()?;
     context.run(&mut game_state)
 }
