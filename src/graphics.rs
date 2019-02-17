@@ -48,6 +48,8 @@ pub struct DrawImageParams {
     pub position: Vector2f,
 
     pub clip_rect: Option<Rectangle<i32>>,
+
+    pub color: Option<Color>,
 }
 
 impl Default for DrawImageParams {
@@ -55,6 +57,7 @@ impl Default for DrawImageParams {
         Self {
             position: Vector2f::ZERO,
             clip_rect: None,
+            color: None,
         }
     }
 }
@@ -65,6 +68,9 @@ pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
     sprite.set_position(SfVector2f::from(params.position));
     if let Some(clip_rect) = params.clip_rect {
         sprite.set_texture_rect(&clip_rect.into());
+    }
+    if let Some(color) = params.color {
+        sprite.set_color(&color.into());
     }
     ctx.window.draw_sprite(&sprite, SfRenderStates::default())
 }
