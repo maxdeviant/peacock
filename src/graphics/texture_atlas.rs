@@ -19,7 +19,7 @@ impl TextureAtlas {
         self.textures.insert(key.to_string(), texture);
     }
 
-    /// Returns a reference to the [`Texture`] stored under the specified key.
+    /// Returns a reference to the [`Image`] stored under the specified key.
     pub fn get_texture(&self, key: &str) -> Option<&Image> {
         self.textures.get(key)
     }
