@@ -1,8 +1,8 @@
-use peacock::graphics::{self, Color, DrawSpriteParams, Sprite, Texture};
+use peacock::graphics::{self, Color, DrawImageParams, Image};
 use peacock::{Context, ContextBuilder, Result, State};
 
 struct GameState {
-    textures: Vec<Texture>,
+    swatches: Vec<Image>,
 }
 
 impl GameState {
@@ -161,12 +161,12 @@ impl GameState {
             Color::BLACK,
         ];
 
-        let mut textures = Vec::with_capacity(all_colors.len());
+        let mut swatches = Vec::with_capacity(all_colors.len());
         for color in all_colors {
-            textures.push(Texture::from_color((32, 32).into(), color)?);
+            swatches.push(Image::from_color((32, 32).into(), color)?);
         }
 
-        Ok(Self { textures })
+        Ok(Self { swatches })
     }
 }
 
@@ -183,17 +183,16 @@ impl State for GameState {
         for x in 0..width {
             for y in 0..height {
                 let index = x + (y * width);
-                if index > self.textures.len() - 1 {
+                if index > self.swatches.len() - 1 {
                     break;
                 }
-                let texture = &self.textures[index];
 
-                let sprite = Sprite::with_texture(&texture.texture);
-                graphics::draw_sprite(
+                graphics::draw_image(
                     ctx,
-                    &sprite,
-                    DrawSpriteParams {
+                    &self.swatches[index],
+                    DrawImageParams {
                         position: (x as f32 * 32.0, y as f32 * 32.0).into(),
+                        ..Default::default()
                     },
                 )
             }

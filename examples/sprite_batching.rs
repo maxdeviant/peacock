@@ -1,15 +1,15 @@
-use peacock::graphics::{self, Rectangle, Sprite, SpriteBatch, Texture, Transformable};
+use peacock::graphics::{self, Image, Rectangle, Sprite, SpriteBatch, Transformable};
 use peacock::time;
 use peacock::window;
 use peacock::{Context, ContextBuilder, Result, State};
 
 struct GameState {
-    sprite_sheet: Texture,
+    sprite_sheet: Image,
 }
 
 impl GameState {
     fn new() -> Self {
-        let sprite_sheet = Texture::from_file("examples/res/0x72_dungeon_ii.png")
+        let sprite_sheet = Image::from_file("examples/res/0x72_dungeon_ii.png")
             .expect("Could not load sprite sheet!");
 
         Self { sprite_sheet }

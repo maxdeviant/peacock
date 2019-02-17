@@ -1,11 +1,11 @@
 use sfml::graphics::{PrimitiveType, Sprite, Transformable, VertexArray};
 use sfml::system::Vector2f;
 
-use crate::graphics::{self, Drawable, Texture};
+use crate::graphics::{self, Drawable, Image};
 use crate::Context;
 
 pub struct SpriteBatch<'t> {
-    texture: &'t Texture,
+    texture: &'t Image,
     vertices: VertexArray,
     sprite_count: usize,
 }
@@ -14,7 +14,7 @@ impl<'t> SpriteBatch<'t> {
     /// The initial size of the vertex array, in batch units.
     const INITIAL_VERTEX_ARRAY_SIZE: usize = 256;
 
-    pub fn new(texture: &'t Texture) -> Self {
+    pub fn new(texture: &'t Image) -> Self {
         let vertices = VertexArray::new(
             PrimitiveType::Quads,
             SpriteBatch::INITIAL_VERTEX_ARRAY_SIZE * 4,

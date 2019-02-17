@@ -1,9 +1,9 @@
-use crate::graphics::{self, DrawSpriteParams, Drawable, Rectangle, Sprite, Texture};
+use crate::graphics::{self, DrawImageParams, Drawable, Image, Rectangle};
 use crate::Context;
 
 #[derive(Debug)]
 pub struct Animation {
-    texture: Texture,
+    texture: Image,
 
     /// The frames in the animation.
     frames: Vec<Rectangle<i32>>,
@@ -17,7 +17,7 @@ pub struct Animation {
 }
 
 impl Animation {
-    pub fn new(texture: Texture, frames: Vec<Rectangle<i32>>, frame_length: i32) -> Self {
+    pub fn new(texture: Image, frames: Vec<Rectangle<i32>>, frame_length: i32) -> Self {
         Self {
             texture,
             frames,
@@ -45,9 +45,13 @@ impl Animation {
 
 impl Drawable for Animation {
     fn draw(&self, ctx: &mut Context) {
-        let mut sprite = Sprite::with_texture(&self.texture.texture);
-        sprite.set_texture_rect(&self.frames[self.current_frame].into());
-
-        graphics::draw_sprite(ctx, &sprite, DrawSpriteParams::default())
+        graphics::draw_image(
+            ctx,
+            &self.texture,
+            DrawImageParams {
+                clip_rect: Some(self.frames[self.current_frame]),
+                ..Default::default()
+            },
+        )
     }
 }

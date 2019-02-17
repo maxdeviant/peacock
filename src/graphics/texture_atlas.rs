@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-use crate::graphics::Texture;
+use crate::graphics::Image;
 
 #[derive(Debug)]
 pub struct TextureAtlas {
-    textures: HashMap<String, Texture>,
+    textures: HashMap<String, Image>,
 }
 
 impl TextureAtlas {
@@ -14,13 +14,13 @@ impl TextureAtlas {
         }
     }
 
-    /// Adds a [`Texture`] to the [`TextureAtlas`] under the specified key.
-    pub fn add_texture(&mut self, key: &str, texture: Texture) {
+    /// Adds a [`Image`] to the [`TextureAtlas`] under the specified key.
+    pub fn add_texture(&mut self, key: &str, texture: Image) {
         self.textures.insert(key.to_string(), texture);
     }
 
     /// Returns a reference to the [`Texture`] stored under the specified key.
-    pub fn get_texture(&self, key: &str) -> Option<&Texture> {
+    pub fn get_texture(&self, key: &str) -> Option<&Image> {
         self.textures.get(key)
     }
 }
