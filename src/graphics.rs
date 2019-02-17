@@ -7,7 +7,7 @@ mod sprite_batch;
 mod text;
 mod texture_atlas;
 
-pub use sfml::graphics::{Sprite, Transformable, View, ViewRef};
+pub use sfml::graphics::{View, ViewRef};
 
 pub use self::animation::*;
 pub use self::color::*;
@@ -19,8 +19,9 @@ pub use self::text::*;
 pub use self::texture_atlas::*;
 
 use sfml::graphics::{
-    Color as SfColor, Font as SfFont, RenderStates as SfRenderStates, RenderTarget,
-    Sprite as SfSprite, Text as SfText, VertexArray,
+    Color as SfColor, Font as SfFont, RenderStates as SfRenderStates,
+    RenderTarget as SfRenderTarget, Sprite as SfSprite, Text as SfText,
+    Transformable as SfTransformable, VertexArray as SfVertexArray,
 };
 use sfml::system::Vector2f as SfVector2f;
 
@@ -84,7 +85,7 @@ pub fn draw_text(ctx: &mut Context, text: &Text, params: DrawTextParams) {
 }
 
 /// Draws a [`VertexArray`] to the current render target.
-pub(crate) fn draw_vertex_array(ctx: &mut Context, vertex_array: &VertexArray, texture: &Image) {
+pub(crate) fn draw_vertex_array(ctx: &mut Context, vertex_array: &SfVertexArray, texture: &Image) {
     ctx.window.draw_vertex_array(
         vertex_array,
         SfRenderStates {
