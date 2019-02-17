@@ -6,8 +6,7 @@ mod rectangle;
 mod sprite_batch;
 mod text;
 mod texture_atlas;
-
-pub use sfml::graphics::{View, ViewRef};
+mod view;
 
 pub use self::animation::*;
 pub use self::color::*;
@@ -17,6 +16,7 @@ pub use self::rectangle::*;
 pub use self::sprite_batch::*;
 pub use self::text::*;
 pub use self::texture_atlas::*;
+pub use self::view::*;
 
 use sfml::graphics::{
     Color as SfColor, Font as SfFont, RenderStates as SfRenderStates,

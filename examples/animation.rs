@@ -35,7 +35,7 @@ impl State for GameState {
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         let mut view = View::new((0.0, 0.0).into(), (1920.0, 1080.0).into());
-        view.zoom(0.25);
+        view.set_zoom(0.25);
 
         window::set_view(ctx, &view);
 

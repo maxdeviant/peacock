@@ -1,7 +1,7 @@
-use crate::graphics::ViewRef;
-use crate::Context;
+use sfml::graphics::{RenderTarget as SfRenderTarget, View as SfView};
 
-use sfml::graphics::RenderTarget;
+use crate::graphics::View;
+use crate::Context;
 
 /// Sets the title of the window.
 pub fn set_title(ctx: &mut Context, title: &str) {
@@ -9,6 +9,7 @@ pub fn set_title(ctx: &mut Context, title: &str) {
 }
 
 /// Sets a new view for the window.
-pub fn set_view(ctx: &mut Context, view: &ViewRef) {
-    ctx.window.set_view(view);
+pub fn set_view(ctx: &mut Context, view: &View) {
+    let view: SfView = view.into();
+    ctx.window.set_view(&view);
 }
