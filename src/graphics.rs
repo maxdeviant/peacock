@@ -20,7 +20,7 @@ pub use self::texture_atlas::*;
 
 use sfml::graphics::{
     Color as SfColor, Font as SfFont, RenderStates as SfRenderStates, RenderTarget,
-    Sprite as SfSprite, Text as SfText, Transform as SfTransform, VertexArray,
+    Sprite as SfSprite, Text as SfText, VertexArray,
 };
 use sfml::system::Vector2f as SfVector2f;
 
@@ -78,16 +78,9 @@ pub struct DrawTextParams {
 /// Draws some [`Text`] to the current render target.
 pub fn draw_text(ctx: &mut Context, text: &Text, params: DrawTextParams) {
     let font: SfFont = text.font.into();
-    let text = SfText::new(text.string, &font, text.size);
-    let mut transform = SfTransform::IDENTITY;
-    transform.translate(params.position.x, params.position.y);
-    ctx.window.draw_text(
-        &text,
-        SfRenderStates {
-            transform,
-            ..Default::default()
-        },
-    )
+    let mut text = SfText::new(text.string, &font, text.size);
+    text.set_position(SfVector2f::from(params.position));
+    ctx.window.draw_text(&text, SfRenderStates::default())
 }
 
 /// Draws a [`VertexArray`] to the current render target.
