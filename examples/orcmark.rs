@@ -13,6 +13,7 @@ const HEIGHT: i32 = 1080;
 const INITIAL_ORCS: usize = 100;
 const ORC_WIDTH: i32 = 11;
 const ORC_HEIGHT: i32 = 15;
+const ORC_SCALE: f32 = 2.0;
 
 const GRAVITY: f32 = 0.5;
 
@@ -56,8 +57,8 @@ impl GameState {
             rng,
             sprite_sheet,
             orcs,
-            max_x: (WIDTH - ORC_WIDTH) as f32,
-            max_y: (HEIGHT - ORC_HEIGHT) as f32,
+            max_x: WIDTH as f32 - (ORC_WIDTH as f32 * ORC_SCALE),
+            max_y: HEIGHT as f32 - (ORC_HEIGHT as f32 * ORC_SCALE),
             spawn_timer: 0,
         }
     }
@@ -113,6 +114,7 @@ impl State for GameState {
                 DrawImageParams {
                     position: orc.position,
                     clip_rect: Some(Rectangle::<i32>::new(372, 241, ORC_WIDTH, ORC_HEIGHT)),
+                    scale: Some(Vector2f::new(ORC_SCALE, ORC_SCALE)),
                     ..Default::default()
                 },
             );
