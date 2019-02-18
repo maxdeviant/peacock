@@ -11,22 +11,39 @@ const WIDTH: i32 = 1920;
 const HEIGHT: i32 = 1080;
 
 const INITIAL_ORCS: usize = 100;
-const ORC_WIDTH: i32 = 11;
-const ORC_HEIGHT: i32 = 15;
 const ORC_SCALE: f32 = 2.0;
+
+const ORC_GRUNT_WIDTH: i32 = 11;
+const ORC_GRUNT_HEIGHT: i32 = 16;
+
+const ORC_SHAMAN_WIDTH: i32 = 11;
+const ORC_SHAMAN_HEIGHT: i32 = 15;
 
 const GRAVITY: f32 = 0.5;
 
+enum OrcKind {
+    Grunt,
+    Shaman,
+}
+
 struct Orc {
+    kind: OrcKind,
     position: Vector2f,
     velocity: Vector2f,
 }
 
 impl Orc {
     fn new(rng: &mut ThreadRng) -> Self {
+        let kind = if rng.gen::<bool>() {
+            OrcKind::Grunt
+        } else {
+            OrcKind::Shaman
+        };
+
         let velocity = Vector2f::new(rng.gen::<f32>() * 5.0, rng.gen::<f32>() * 5.0 - 2.5);
 
         Self {
+            kind,
             position: Vector2f::ZERO,
             velocity,
         }
@@ -37,8 +54,6 @@ struct GameState {
     rng: ThreadRng,
     sprite_sheet: Image,
     orcs: Vec<Orc>,
-    max_x: f32,
-    max_y: f32,
     spawn_timer: i32,
 }
 
@@ -57,8 +72,6 @@ impl GameState {
             rng,
             sprite_sheet,
             orcs,
-            max_x: WIDTH as f32 - (ORC_WIDTH as f32 * ORC_SCALE),
-            max_y: HEIGHT as f32 - (ORC_HEIGHT as f32 * ORC_SCALE),
             spawn_timer: 0,
         }
     }
@@ -79,20 +92,28 @@ impl State for GameState {
         }
 
         for orc in &mut self.orcs {
+            let (orc_width, orc_height) = match orc.kind {
+                OrcKind::Grunt => (ORC_GRUNT_WIDTH, ORC_GRUNT_HEIGHT),
+                OrcKind::Shaman => (ORC_SHAMAN_WIDTH, ORC_SHAMAN_HEIGHT),
+            };
+
+            let max_x = WIDTH as f32 - (orc_width as f32 * ORC_SCALE);
+            let max_y = HEIGHT as f32 - (orc_height as f32 * ORC_SCALE);
+
             orc.position += orc.velocity;
             orc.velocity.y += GRAVITY;
 
-            if orc.position.x > self.max_x {
+            if orc.position.x > max_x {
                 orc.velocity.x *= -1.0;
-                orc.position.x = self.max_x;
+                orc.position.x = max_x;
             } else if orc.position.x < 0.0 {
                 orc.velocity.x *= -1.0;
                 orc.position.x = 0.0;
             }
 
-            if orc.position.y > self.max_y {
+            if orc.position.y > max_y {
                 orc.velocity.y *= -0.8;
-                orc.position.y = self.max_y;
+                orc.position.y = max_y;
 
                 if self.rng.gen::<bool>() {
                     orc.velocity.y -= 3.0 + (self.rng.gen::<f32>() * 4.0);
@@ -108,12 +129,21 @@ impl State for GameState {
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         for orc in &self.orcs {
+            let clip_rect = match orc.kind {
+                OrcKind::Grunt => {
+                    Rectangle::<i32>::new(372, 208, ORC_GRUNT_WIDTH, ORC_GRUNT_HEIGHT)
+                }
+                OrcKind::Shaman => {
+                    Rectangle::<i32>::new(372, 241, ORC_SHAMAN_WIDTH, ORC_SHAMAN_HEIGHT)
+                }
+            };
+
             graphics::draw_image(
                 ctx,
                 &self.sprite_sheet,
                 DrawImageParams {
                     position: orc.position,
-                    clip_rect: Some(Rectangle::<i32>::new(372, 241, ORC_WIDTH, ORC_HEIGHT)),
+                    clip_rect: Some(clip_rect),
                     scale: Some(Vector2f::new(ORC_SCALE, ORC_SCALE)),
                     ..Default::default()
                 },
