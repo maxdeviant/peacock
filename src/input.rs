@@ -6,6 +6,9 @@ use crate::{Context, Result};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Key {
+    /// An unknown key.
+    Unknown,
+
     /// The `A` key.
     A,
 
@@ -114,9 +117,44 @@ pub enum Key {
     /// The `9` key.
     Num9,
 
+    /// The `F1` key.
+    F1,
+
+    /// The `F2` key.
+    F2,
+
+    /// The `F3` key.
+    F3,
+
+    /// The `F4` key.
+    F4,
+
+    /// The `F5` key.
+    F5,
+
+    /// The `F6` key.
+    F6,
+
+    /// The `F7` key.
+    F7,
+
+    /// The `F8` key.
+    F8,
+
+    /// The `F9` key.
+    F9,
+
+    /// The `F10` key.
+    F10,
+
+    /// The `F11` key.
+    F11,
+
+    /// The `F12` key.
+    F12,
+
     /// The `Space` key.
     Space,
-    // TODO: Finish adding keys.
 }
 
 impl From<SfKey> for Key {
@@ -158,8 +196,20 @@ impl From<SfKey> for Key {
             SfKey::Num7 => Key::Num7,
             SfKey::Num8 => Key::Num8,
             SfKey::Num9 => Key::Num9,
+            SfKey::F1 => Key::F1,
+            SfKey::F2 => Key::F2,
+            SfKey::F3 => Key::F3,
+            SfKey::F4 => Key::F4,
+            SfKey::F5 => Key::F5,
+            SfKey::F6 => Key::F6,
+            SfKey::F7 => Key::F7,
+            SfKey::F8 => Key::F8,
+            SfKey::F9 => Key::F9,
+            SfKey::F10 => Key::F10,
+            SfKey::F11 => Key::F11,
+            SfKey::F12 => Key::F12,
             SfKey::Space => Key::Space,
-            _ => unreachable!(),
+            _ => Key::Unknown,
         }
     }
 }
