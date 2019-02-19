@@ -6,6 +6,7 @@ use sfml::window::{Event, Style};
 
 use crate::error::Result;
 use crate::graphics::{self, Color};
+use crate::input::{self, KeyboardContext};
 use crate::time;
 use crate::State;
 
@@ -15,6 +16,7 @@ pub struct Context {
     tick_rate: Duration,
     // TODO: This should probably be in a dedicated struct. No primitive obsession!
     pub(crate) fps_tracker: VecDeque<f64>,
+    pub(crate) keyboard: KeyboardContext,
 }
 
 impl Context {
@@ -40,7 +42,10 @@ impl Context {
                 .push_back(time::duration_to_f64(elapsed_time));
 
             while let Some(event) = self.window.poll_event() {
-                if let Err(err) = self.handle_event(event) {
+                if let Err(err) = self
+                    .handle_event(event)
+                    .and_then(|event| input::handle_event(self, event))
+                {
                     self.is_running = false;
                     return Err(err);
                 }
@@ -52,6 +57,7 @@ impl Context {
                     return Err(err);
                 }
 
+                input::cleanup_after_state_update(self);
                 lag -= self.tick_rate;
             }
 
@@ -144,6 +150,7 @@ impl<'a> ContextBuilder<'a> {
             is_running: false,
             tick_rate: time::f64_to_duration(self.tick_rate),
             fps_tracker,
+            keyboard: KeyboardContext::new(),
         })
     }
 }

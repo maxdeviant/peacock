@@ -2,7 +2,7 @@ use rand::rngs::ThreadRng;
 use rand::{self, Rng};
 
 use peacock::graphics::{self, DrawImageParams, Image, Rectangle};
-use peacock::input::Key;
+use peacock::input::{self, Key};
 use peacock::time;
 use peacock::window;
 use peacock::{Context, ContextBuilder, Result, State, Vector2f};
@@ -78,12 +78,12 @@ impl GameState {
 }
 
 impl State for GameState {
-    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, ctx: &mut Context) -> Result<()> {
         if self.spawn_timer > 0 {
             self.spawn_timer -= 1;
         }
 
-        if Key::Space.is_pressed() && self.spawn_timer == 0 {
+        if input::is_key_down(ctx, Key::Space) && self.spawn_timer == 0 {
             for _ in 0..INITIAL_ORCS {
                 self.orcs.push(Orc::new(&mut self.rng));
             }
