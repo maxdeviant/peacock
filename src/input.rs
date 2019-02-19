@@ -153,6 +153,18 @@ pub enum Key {
     /// The `F12` key.
     F12,
 
+    /// The left arrow.
+    Left,
+
+    /// The right arrow.
+    Right,
+
+    /// The up arrow.
+    Up,
+
+    /// The down arrow.
+    Down,
+
     /// The `Space` key.
     Space,
 }
@@ -208,6 +220,10 @@ impl From<SfKey> for Key {
             SfKey::F10 => Key::F10,
             SfKey::F11 => Key::F11,
             SfKey::F12 => Key::F12,
+            SfKey::Left => Key::Left,
+            SfKey::Right => Key::Right,
+            SfKey::Up => Key::Up,
+            SfKey::Down => Key::Down,
             SfKey::Space => Key::Space,
             _ => Key::Unknown,
         }
