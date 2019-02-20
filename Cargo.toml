@@ -14,5 +14,6 @@ edition = "2018"
 maintenance = { status = "actively-developed" }
 
 [dependencies]
+hashbrown = "0.1.8"
 rand = "0.6.5"
 sfml = "0.14.0"

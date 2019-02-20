@@ -1,5 +1,4 @@
-use std::collections::HashSet;
-
+use hashbrown::HashSet;
 use sfml::window::{Event as SfEvent, Key as SfKey};
 
 use crate::{Context, Result};
@@ -238,8 +237,8 @@ pub(crate) struct KeyboardContext {
 impl KeyboardContext {
     pub(crate) fn new() -> Self {
         Self {
-            last_pressed_keys: HashSet::with_capacity(256),
-            pressed_keys: HashSet::with_capacity(256),
+            last_pressed_keys: HashSet::with_capacity(16),
+            pressed_keys: HashSet::with_capacity(16),
         }
     }
 }
