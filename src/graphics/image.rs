@@ -23,4 +23,9 @@ impl Image {
         let texture = SfTexture::from_image(&image).ok_or(Error)?;
         Ok(Self { texture })
     }
+
+    /// Returns the size of the [`Image`], in pixels.
+    pub fn size(&self) -> Vector2u {
+        self.texture.size().into()
+    }
 }
