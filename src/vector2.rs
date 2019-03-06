@@ -3,7 +3,7 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssi
 use sfml::system::{Vector2 as SfVector2, Vector2f as SfVector2f};
 
 /// A two-dimensional vector.
-#[derive(Clone, PartialOrd, Ord, PartialEq, Eq, Debug, Copy, Default)]
+#[derive(Clone, PartialOrd, Ord, PartialEq, Eq, Debug, Copy, Default, Hash)]
 pub struct Vector2<T> {
     /// The x-component of the vector.
     pub x: T,
