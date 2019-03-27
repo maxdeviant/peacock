@@ -1,7 +1,9 @@
+pub mod mouse;
+
 use hashbrown::HashSet;
 use sfml::window::{Event as SfEvent, Key as SfKey};
 
-use crate::{Context, Result};
+use crate::{Context, Result, Vector2f};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Key {
@@ -243,6 +245,18 @@ impl KeyboardContext {
     }
 }
 
+pub(crate) struct MouseContext {
+    position: Vector2f,
+}
+
+impl MouseContext {
+    pub(crate) fn new() -> Self {
+        Self {
+            position: Vector2f::ZERO,
+        }
+    }
+}
+
 pub(crate) fn handle_event(ctx: &mut Context, event: SfEvent) -> Result<()> {
     match event {
         SfEvent::KeyPressed { code: key, .. } => {
@@ -250,6 +264,9 @@ pub(crate) fn handle_event(ctx: &mut Context, event: SfEvent) -> Result<()> {
         }
         SfEvent::KeyReleased { code: key, .. } => {
             ctx.keyboard.pressed_keys.remove(&key.into());
+        }
+        SfEvent::MouseMoved { x, y } => {
+            ctx.mouse.position = Vector2f::new(x as f32, y as f32);
         }
         _ => {}
     };

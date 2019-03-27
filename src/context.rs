@@ -6,7 +6,7 @@ use sfml::window::{Event, Style};
 
 use crate::error::Result;
 use crate::graphics::{self, Color};
-use crate::input::{self, KeyboardContext};
+use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
 use crate::State;
 
@@ -17,6 +17,7 @@ pub struct Context {
     // TODO: This should probably be in a dedicated struct. No primitive obsession!
     pub(crate) fps_tracker: VecDeque<f64>,
     pub(crate) keyboard: KeyboardContext,
+    pub(crate) mouse: MouseContext,
 }
 
 impl Context {
@@ -151,6 +152,7 @@ impl<'a> ContextBuilder<'a> {
             tick_rate: time::f64_to_duration(self.tick_rate),
             fps_tracker,
             keyboard: KeyboardContext::new(),
+            mouse: MouseContext::new(),
         })
     }
 }
