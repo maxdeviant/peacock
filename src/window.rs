@@ -13,3 +13,8 @@ pub fn set_view(ctx: &mut Context, view: &View) {
     let view: SfView = view.into();
     ctx.window.set_view(&view);
 }
+
+/// Sets whether the mouse cursor is visible in the window.
+pub fn set_mouse_cursor_visible(ctx: &mut Context, visible: bool) {
+    ctx.window.set_mouse_cursor_visible(visible);
+}
