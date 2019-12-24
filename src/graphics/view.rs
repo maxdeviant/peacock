@@ -1,5 +1,3 @@
-use sfml::graphics::View as SfView;
-
 use crate::Vector2f;
 
 #[derive(Debug)]
@@ -26,16 +24,5 @@ impl View {
 
     pub fn set_zoom(&mut self, zoom: f32) {
         self.zoom = zoom;
-    }
-}
-
-impl From<&View> for SfView {
-    fn from(view: &View) -> Self {
-        let mut sf_view = SfView::default();
-        sf_view.set_center(view.center);
-        sf_view.set_size(view.size);
-        sf_view.set_rotation(view.rotation);
-        sf_view.zoom(view.zoom);
-        sf_view
     }
 }

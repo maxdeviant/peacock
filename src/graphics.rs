@@ -18,13 +18,6 @@ pub use self::text::*;
 pub use self::texture_atlas::*;
 pub use self::view::*;
 
-use sfml::graphics::{
-    Color as SfColor, Font as SfFont, RenderStates as SfRenderStates,
-    RenderTarget as SfRenderTarget, Sprite as SfSprite, Text as SfText,
-    Transformable as SfTransformable, VertexArray as SfVertexArray,
-};
-use sfml::system::Vector2f as SfVector2f;
-
 use crate::{Context, Vector2f};
 
 pub trait Drawable {

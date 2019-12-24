@@ -1,5 +1,3 @@
-use sfml::graphics::Color as SfColor;
-
 /// An RGBA color.
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub struct Color {
@@ -193,26 +191,4 @@ impl Color {
     predefined_rgb!(WHITE, 255, 255, 255);
     predefined_rgb!(YELLOW_GREEN, 154, 205, 50);
     predefined_rgb!(YELLOW, 255, 255, 0);
-}
-
-impl From<SfColor> for Color {
-    fn from(color: SfColor) -> Self {
-        Self {
-            r: color.r,
-            g: color.g,
-            b: color.b,
-            a: color.a,
-        }
-    }
-}
-
-impl From<Color> for SfColor {
-    fn from(color: Color) -> Self {
-        Self {
-            r: color.r,
-            g: color.g,
-            b: color.b,
-            a: color.a,
-        }
-    }
 }

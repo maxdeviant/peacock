@@ -1,5 +1,3 @@
-use sfml::graphics::{Image as SfImage, Texture as SfTexture};
-
 use crate::error::Error;
 use crate::graphics::Color;
 use crate::{Result, Vector2u};

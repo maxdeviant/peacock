@@ -1,9 +1,6 @@
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
-use sfml::graphics::RenderWindow;
-use sfml::window::{Event, Style};
-
 use crate::error::Result;
 use crate::graphics::{self, Color};
 use crate::input::{self, KeyboardContext, MouseContext};

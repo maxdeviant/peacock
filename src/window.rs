@@ -1,5 +1,3 @@
-use sfml::graphics::{RenderTarget as SfRenderTarget, View as SfView};
-
 use crate::graphics::View;
 use crate::Context;
 

@@ -1,7 +1,3 @@
-use sfml::graphics::{
-    Color as SfColor, PrimitiveType as SfPrimitiveType, VertexArray as SfVertexArray,
-};
-
 use crate::graphics::{self, Color, Drawable, Image, Rectangle};
 use crate::{Context, Vector2f};
 

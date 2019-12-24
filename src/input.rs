@@ -1,7 +1,6 @@
 pub mod mouse;
 
 use hashbrown::HashSet;
-use sfml::window::{Event as SfEvent, Key as SfKey};
 
 use crate::{Context, Result, Vector2f};
 
@@ -168,67 +167,6 @@ pub enum Key {
 
     /// The `Space` key.
     Space,
-}
-
-impl From<SfKey> for Key {
-    fn from(key: SfKey) -> Self {
-        match key {
-            SfKey::A => Key::A,
-            SfKey::B => Key::B,
-            SfKey::C => Key::C,
-            SfKey::D => Key::D,
-            SfKey::E => Key::E,
-            SfKey::F => Key::F,
-            SfKey::G => Key::G,
-            SfKey::H => Key::H,
-            SfKey::I => Key::I,
-            SfKey::J => Key::J,
-            SfKey::K => Key::K,
-            SfKey::L => Key::L,
-            SfKey::M => Key::M,
-            SfKey::N => Key::N,
-            SfKey::O => Key::O,
-            SfKey::P => Key::P,
-            SfKey::Q => Key::Q,
-            SfKey::R => Key::R,
-            SfKey::S => Key::S,
-            SfKey::T => Key::T,
-            SfKey::U => Key::U,
-            SfKey::V => Key::V,
-            SfKey::W => Key::W,
-            SfKey::X => Key::X,
-            SfKey::Y => Key::Y,
-            SfKey::Z => Key::Z,
-            SfKey::Num0 => Key::Num0,
-            SfKey::Num1 => Key::Num1,
-            SfKey::Num2 => Key::Num2,
-            SfKey::Num3 => Key::Num3,
-            SfKey::Num4 => Key::Num4,
-            SfKey::Num5 => Key::Num5,
-            SfKey::Num6 => Key::Num6,
-            SfKey::Num7 => Key::Num7,
-            SfKey::Num8 => Key::Num8,
-            SfKey::Num9 => Key::Num9,
-            SfKey::F1 => Key::F1,
-            SfKey::F2 => Key::F2,
-            SfKey::F3 => Key::F3,
-            SfKey::F4 => Key::F4,
-            SfKey::F5 => Key::F5,
-            SfKey::F6 => Key::F6,
-            SfKey::F7 => Key::F7,
-            SfKey::F8 => Key::F8,
-            SfKey::F9 => Key::F9,
-            SfKey::F10 => Key::F10,
-            SfKey::F11 => Key::F11,
-            SfKey::F12 => Key::F12,
-            SfKey::Left => Key::Left,
-            SfKey::Right => Key::Right,
-            SfKey::Up => Key::Up,
-            SfKey::Down => Key::Down,
-            SfKey::Space => Key::Space,
-            _ => Key::Unknown,
-        }
-    }
 }
 
 pub(crate) struct KeyboardContext {
