@@ -3,12 +3,12 @@ use std::time::{Duration, Instant};
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
-use sdl2::render::Canvas;
-use sdl2::video::Window;
+use sdl2::render::{Canvas, TextureCreator};
+use sdl2::video::{Window, WindowContext};
 use sdl2::Sdl;
 
 use crate::error::Result;
-use crate::graphics::{self, Color};
+use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
 use crate::State;
@@ -20,6 +20,7 @@ pub struct Context {
     tick_rate: Duration,
     // TODO: This should probably be in a dedicated struct. No primitive obsession!
     pub(crate) fps_tracker: VecDeque<f64>,
+    pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
 }
@@ -153,6 +154,7 @@ impl<'a> ContextBuilder<'a> {
             is_running: false,
             tick_rate: time::f64_to_duration(self.tick_rate),
             fps_tracker,
+            graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),
         })

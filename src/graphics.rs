@@ -1,8 +1,14 @@
 mod color;
+mod context;
+mod image;
 mod rectangle;
 
 pub use self::color::*;
+pub use self::image::*;
+pub(crate) use self::context::*;
 pub use self::rectangle::*;
+
+use sdl2::rect::Rect as SdlRect;
 
 use crate::{Context, Vector2f};
 
@@ -43,6 +49,13 @@ impl Default for DrawImageParams {
             scale: None,
         }
     }
+}
+
+/// Draws an [`Image`] to the current render target.
+pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
+    let texture = ctx.graphics.textures.get(&image.texture).unwrap();
+
+    ctx.canvas.copy(&texture, None, SdlRect::new(params.position.x as i32, params.position.y as i32, 32, 32));
 }
 
 /// The parameters for drawing [`Text`] to the current render target.
