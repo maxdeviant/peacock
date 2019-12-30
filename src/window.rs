@@ -2,7 +2,7 @@ use crate::Context;
 
 /// Sets the title of the window.
 pub fn set_title(ctx: &mut Context, title: &str) {
-    unimplemented!();
+    ctx.canvas.window_mut().set_title(title);
 }
 
 /// Sets whether the mouse cursor is visible in the window.
