@@ -56,6 +56,12 @@ pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
     let texture = ctx.graphics.textures.get(&image.texture).unwrap();
     let texture_query = texture.query();
 
+    let (width, height) = if let Some(clip_rect) = params.clip_rect {
+        (clip_rect.width, clip_rect.height)
+    } else {
+        (texture_query.width as i32, texture_query.height as i32)
+    };
+
     let clip_rect = if let Some(clip_rect) = params.clip_rect {
         Some(SdlRect::new(
             clip_rect.x,
@@ -70,7 +76,12 @@ pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
     ctx.canvas.copy(
         &texture,
         clip_rect,
-        SdlRect::new(params.position.x as i32, params.position.y as i32, 32, 32),
+        SdlRect::new(
+            params.position.x as i32,
+            params.position.y as i32,
+            width as u32,
+            height as u32,
+        ),
     );
 }
 
