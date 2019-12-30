@@ -5,6 +5,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     stdenv
-    cmake
+    SDL2
   ];
 }
