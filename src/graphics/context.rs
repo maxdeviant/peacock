@@ -14,7 +14,7 @@ impl GraphicsContext {
     pub(crate) fn new() -> Self {
         Self {
             textures: HashMap::new(),
-            counter: 0
+            counter: 0,
         }
     }
 }

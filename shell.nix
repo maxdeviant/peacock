@@ -6,5 +6,6 @@ stdenv.mkDerivation {
   buildInputs = [
     stdenv
     SDL2
+    SDL2_image
   ];
 }

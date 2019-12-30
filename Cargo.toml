@@ -16,4 +16,4 @@ maintenance = { status = "actively-developed" }
 [dependencies]
 hashbrown = "0.1.8"
 rand = "0.6.5"
-sdl2 = { version = "0.32", features = ["unsafe_textures"] }
+sdl2 = { version = "0.32", features = ["image", "unsafe_textures"] }

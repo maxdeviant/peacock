@@ -4,8 +4,8 @@ mod image;
 mod rectangle;
 
 pub use self::color::*;
-pub use self::image::*;
 pub(crate) use self::context::*;
+pub use self::image::*;
 pub use self::rectangle::*;
 
 use sdl2::rect::Rect as SdlRect;
@@ -54,8 +54,24 @@ impl Default for DrawImageParams {
 /// Draws an [`Image`] to the current render target.
 pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
     let texture = ctx.graphics.textures.get(&image.texture).unwrap();
+    let texture_query = texture.query();
 
-    ctx.canvas.copy(&texture, None, SdlRect::new(params.position.x as i32, params.position.y as i32, 32, 32));
+    let clip_rect = if let Some(clip_rect) = params.clip_rect {
+        Some(SdlRect::new(
+            clip_rect.x,
+            clip_rect.y,
+            clip_rect.width as u32,
+            clip_rect.height as u32,
+        ))
+    } else {
+        None
+    };
+
+    ctx.canvas.copy(
+        &texture,
+        clip_rect,
+        SdlRect::new(params.position.x as i32, params.position.y as i32, 32, 32),
+    );
 }
 
 /// The parameters for drawing [`Text`] to the current render target.
