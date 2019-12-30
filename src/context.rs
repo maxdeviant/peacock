@@ -1,6 +1,8 @@
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
+use sdl2::event::Event;
+
 use crate::error::Result;
 use crate::graphics::{self, Color};
 use crate::input::{self, KeyboardContext, MouseContext};
@@ -8,7 +10,6 @@ use crate::time;
 use crate::State;
 
 pub struct Context {
-    pub(crate) window: RenderWindow,
     is_running: bool,
     tick_rate: Duration,
     // TODO: This should probably be in a dedicated struct. No primitive obsession!
@@ -22,8 +23,6 @@ impl Context {
     where
         S: State,
     {
-        self.window.set_active(true);
-
         let mut last_time = Instant::now();
         let mut lag = Duration::from_secs(0);
 
@@ -38,16 +37,6 @@ impl Context {
             self.fps_tracker.pop_front();
             self.fps_tracker
                 .push_back(time::duration_to_f64(elapsed_time));
-
-            while let Some(event) = self.window.poll_event() {
-                if let Err(err) = self
-                    .handle_event(event)
-                    .and_then(|event| input::handle_event(self, event))
-                {
-                    self.is_running = false;
-                    return Err(err);
-                }
-            }
 
             while lag >= self.tick_rate {
                 if let Err(err) = state.update(self) {
@@ -68,19 +57,15 @@ impl Context {
                 return Err(err);
             }
 
-            self.window.display();
-
             std::thread::yield_now();
         }
-
-        self.window.close();
 
         Ok(())
     }
 
     fn handle_event(&mut self, event: Event) -> Result<Event> {
         match event {
-            Event::Closed => self.is_running = false,
+            Event::Quit {..} => self.is_running = false,
             _ => {}
         }
 
@@ -125,26 +110,10 @@ impl<'a> ContextBuilder<'a> {
     }
 
     pub fn build(&self) -> Result<Context> {
-        let window_style = if self.fullscreen {
-            Style::FULLSCREEN
-        } else {
-            Style::CLOSE
-        };
-
-        let mut window = RenderWindow::new(
-            (self.width as u32, self.height as u32),
-            self.title,
-            window_style,
-            &Default::default(),
-        );
-
-        window.set_vertical_sync_enabled(self.vsync);
-
         let mut fps_tracker = VecDeque::with_capacity(200);
         fps_tracker.resize(200, 1.0 / 60.0);
 
         Ok(Context {
-            window,
             is_running: false,
             tick_rate: time::f64_to_duration(self.tick_rate),
             fps_tracker,

@@ -1,6 +1,7 @@
 pub mod mouse;
 
 use hashbrown::HashSet;
+use sdl2::event::Event;
 
 use crate::{Context, Result, Vector2f};
 
@@ -195,17 +196,8 @@ impl MouseContext {
     }
 }
 
-pub(crate) fn handle_event(ctx: &mut Context, event: SfEvent) -> Result<()> {
+pub(crate) fn handle_event(ctx: &mut Context, event: Event) -> Result<()> {
     match event {
-        SfEvent::KeyPressed { code: key, .. } => {
-            ctx.keyboard.pressed_keys.insert(key.into());
-        }
-        SfEvent::KeyReleased { code: key, .. } => {
-            ctx.keyboard.pressed_keys.remove(&key.into());
-        }
-        SfEvent::MouseMoved { x, y } => {
-            ctx.mouse.position = Vector2f::new(x as f32, y as f32);
-        }
         _ => {}
     };
 

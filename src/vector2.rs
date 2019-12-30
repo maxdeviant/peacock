@@ -23,15 +23,6 @@ impl<T> From<(T, T)> for Vector2<T> {
     }
 }
 
-impl<T> From<SfVector2<T>> for Vector2<T> {
-    fn from(vector: SfVector2<T>) -> Self {
-        Self {
-            x: vector.x,
-            y: vector.y,
-        }
-    }
-}
-
 macro_rules! impl_ops {
     ( $_trait:ident, $_func:ident, $( $_type:ty ),+ ) => {
         impl<T: $_trait + Copy> $_trait<T> for Vector2<T> {
