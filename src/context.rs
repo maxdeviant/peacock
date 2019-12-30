@@ -48,15 +48,12 @@ impl Context {
                 .push_back(time::duration_to_f64(elapsed_time));
 
             for event in event_pump.poll_iter() {
-                match event {
-                    Event::Quit { .. }
-                    | Event::KeyDown {
-                        keycode: Some(Keycode::Escape),
-                        ..
-                    } => {
-                        self.is_running = false;
-                    }
-                    _ => {}
+                if let Err(err) = self
+                    .handle_event(event)
+                    .and_then(|event| input::handle_event(self, event))
+                {
+                    self.is_running = false;
+                    return Err(err);
                 }
             }
 
