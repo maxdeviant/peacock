@@ -12,7 +12,8 @@ pub trait Drawable {
 
 /// Clears the screen using the given [`Color`].
 pub fn clear(ctx: &mut Context, color: Color) {
-    unimplemented!();
+    ctx.canvas.set_draw_color(color);
+    ctx.canvas.clear();
 }
 
 /// Draws a [`Drawable`] object to the current render target.

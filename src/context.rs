@@ -3,7 +3,6 @@ use std::time::{Duration, Instant};
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
-use sdl2::pixels::Color as SdlColor;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::Sdl;
@@ -15,8 +14,8 @@ use crate::time;
 use crate::State;
 
 pub struct Context {
-    sdl_context: Sdl,
-    canvas: Canvas<Window>,
+    pub(crate) sdl_context: Sdl,
+    pub(crate) canvas: Canvas<Window>,
     is_running: bool,
     tick_rate: Duration,
     // TODO: This should probably be in a dedicated struct. No primitive obsession!
@@ -72,10 +71,7 @@ impl Context {
 
             let dt = time::duration_to_f64(lag) / time::duration_to_f64(self.tick_rate);
 
-            self.canvas.set_draw_color(SdlColor::RGB(0, 255, 255));
-            self.canvas.clear();
-
-            // graphics::clear(self, Color::CADET_BLUE);
+            graphics::clear(self, Color::CADET_BLUE);
 
             if let Err(err) = state.draw(self, dt) {
                 self.is_running = false;
