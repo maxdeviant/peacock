@@ -31,30 +31,23 @@ peacock = { git = "https://github.com/maxdeviant/peacock" }
 
 ### Dependencies
 
-Peacock is built on top of [SFML](https://www.sfml-dev.org/), so you will need to install the SFML libraries for your platform.
+Peacock is built on top of [SDL2](https://www.libsdl.org/download-2.0.php), so you will need to install the SDL2 libraries for your platform.
 
-#### Linux (Ubuntu-based)
-
-If you're running an Ubuntu-based Linux distribution you can (most likely) do the following:
+#### Nix/NixOS
 
 ```sh
-sudo apt install libsfml-dev
-sudo apt install libcsfml-dev
+nix-shell
 ```
 
-#### macOS
+#### Debian/Ubuntu
 
-Before following these instructions make sure you have [Homebrew](https://brew.sh/) installed.
+If you're running a Debian or Ubuntu-based Linux distribution you can (most likely) do the following:
 
 ```sh
-brew install sfml
-brew install csfml
-
-export LIBRARY_PATH=/usr/local/lib
-export DYLD_LIBRARY_PATH=/usr/local/lib
+sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
 ```
 
-For other platforms check out the [`rust-sfml`](https://github.com/jeremyletang/rust-sfml) docs.
+For other platforms check out the [`rust-sdl2`](https://github.com/Rust-SDL2/rust-sdl2) docs.
 
 ## Usage
 
@@ -104,7 +97,7 @@ This got me thinking about what it is that I really want in a Rust game engine. 
 - Safety
   - We're using Rust, so we want things to be safe
   - Some of our libraries make this difficult:
-    - SFML's C bindings are unsafe
+    - SDL2's C bindings are unsafe
     - Peacock doesn't directly depend on it (yet), but in userland `specs` likes to panic a lot
 - "Batteries Included"
   - Peacock should have everything in it that allows you to get games off the ground fast
