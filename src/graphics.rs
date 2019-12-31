@@ -1,12 +1,16 @@
+mod animation;
 mod color;
 mod context;
 mod image;
 mod rectangle;
+mod view;
 
+pub use self::animation::*;
 pub use self::color::*;
 pub(crate) use self::context::*;
 pub use self::image::*;
 pub use self::rectangle::*;
+pub use self::view::*;
 
 use sdl2::rect::Rect as SdlRect;
 

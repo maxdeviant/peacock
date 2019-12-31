@@ -7,8 +7,8 @@ struct GameState {
 }
 
 impl GameState {
-    fn new() -> Self {
-        let sprite_sheet = Image::from_file("examples/res/0x72_dungeon_ii.png")
+    fn new(ctx: &mut Context) -> Self {
+        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")
             .expect("Could not load sprite sheet!");
 
         let animation = Animation::new(
@@ -35,7 +35,7 @@ impl State for GameState {
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         let mut view = View::new((0.0, 0.0).into(), (1920.0, 1080.0).into());
-        view.set_zoom(0.25);
+        view.set_zoom(8.0);
 
         window::set_view(ctx, &view);
 
@@ -48,5 +48,5 @@ impl State for GameState {
 fn main() -> Result<()> {
     ContextBuilder::new("Animation", 1920, 1080)
         .build()?
-        .run(&mut GameState::new())
+        .run_with(GameState::new)
 }
