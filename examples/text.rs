@@ -7,9 +7,9 @@ struct GameState {
 }
 
 impl GameState {
-    fn new() -> Self {
+    fn new(ctx: &mut Context) -> Self {
         let font =
-            Font::from_file("examples/res/Roboto-Regular.ttf").expect("Could not load font!");
+            Font::from_file(ctx, "examples/res/Roboto-Regular.ttf").expect("Could not load font!");
 
         Self { font }
     }
@@ -41,5 +41,5 @@ impl State for GameState {
 fn main() -> Result<()> {
     ContextBuilder::new("Text", 1920, 1080)
         .build()?
-        .run(&mut GameState::new())
+        .run_with(GameState::new)
 }

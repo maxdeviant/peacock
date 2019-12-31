@@ -1,15 +1,19 @@
 mod animation;
 mod color;
 mod context;
+mod font;
 mod image;
 mod rectangle;
+mod text;
 mod view;
 
 pub use self::animation::*;
 pub use self::color::*;
 pub(crate) use self::context::*;
+pub use self::font::*;
 pub use self::image::*;
 pub use self::rectangle::*;
+pub use self::text::*;
 pub use self::view::*;
 
 use sdl2::rect::Rect as SdlRect;
@@ -94,4 +98,31 @@ pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
 pub struct DrawTextParams {
     /// The position at which to draw the [`Text`].
     pub position: Vector2f,
+}
+
+/// Draws some [`Text`] to the current render target.
+pub fn draw_text(ctx: &mut Context, text: &Text, params: DrawTextParams) {
+    let texture_creator = ctx.canvas.texture_creator();
+
+    let surface = text
+        .font
+        .font
+        .render(text.string)
+        .blended(Color::WHITE)
+        .unwrap();
+    let texture = texture_creator
+        .create_texture_from_surface(&surface)
+        .unwrap();
+    let texture_query = texture.query();
+
+    ctx.canvas.copy(
+        &texture,
+        None,
+        SdlRect::new(
+            params.position.x as i32,
+            params.position.y as i32,
+            texture_query.width as u32,
+            texture_query.height as u32,
+        ),
+    );
 }

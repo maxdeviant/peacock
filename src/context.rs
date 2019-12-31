@@ -1,9 +1,11 @@
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
+use lazy_static::*;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::render::{Canvas, TextureCreator};
+use sdl2::ttf::Sdl2TtfContext;
 use sdl2::video::{Window, WindowContext};
 use sdl2::Sdl;
 
@@ -12,6 +14,10 @@ use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
 use crate::State;
+
+lazy_static! {
+    pub(crate) static ref SDL_TTF_CONTEXT: Sdl2TtfContext = sdl2::ttf::init().unwrap();
+}
 
 pub struct Context {
     pub(crate) sdl_context: Sdl,
