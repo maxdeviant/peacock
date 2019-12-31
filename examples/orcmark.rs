@@ -164,7 +164,7 @@ impl State for GameState {
 }
 
 fn main() -> Result<()> {
-    let mut context = ContextBuilder::new("OrcMark", WIDTH, HEIGHT).build()?;
-    let mut game_state = GameState::new(&mut context);
-    context.run(&mut game_state)
+    ContextBuilder::new("OrcMark", WIDTH, HEIGHT)
+        .build()?
+        .run_with(GameState::new)
 }

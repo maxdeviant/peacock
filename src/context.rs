@@ -84,6 +84,24 @@ impl Context {
         Ok(())
     }
 
+    pub fn run_with<F, S>(&mut self, get_state: F) -> Result<()>
+    where
+        S: State,
+        F: FnOnce(&mut Self) -> S,
+    {
+        let mut state = get_state(self);
+        self.run(&mut state)
+    }
+
+    pub fn run_with_result<F, S>(&mut self, get_state: F) -> Result<()>
+    where
+        S: State,
+        F: FnOnce(&mut Self) -> Result<S>,
+    {
+        let mut state = get_state(self)?;
+        self.run(&mut state)
+    }
+
     fn handle_event(&mut self, event: Event) -> Result<Event> {
         match event {
             Event::Quit { .. } => self.is_running = false,
