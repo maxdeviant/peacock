@@ -1,7 +1,5 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-use sfml::system::{Vector2 as SfVector2, Vector2f as SfVector2f};
-
 /// A two-dimensional vector.
 #[derive(Clone, PartialOrd, Ord, PartialEq, Eq, Debug, Copy, Default, Hash)]
 pub struct Vector2<T> {
@@ -22,15 +20,6 @@ impl<T> Vector2<T> {
 impl<T> From<(T, T)> for Vector2<T> {
     fn from((x, y): (T, T)) -> Self {
         Self { x, y }
-    }
-}
-
-impl<T> From<SfVector2<T>> for Vector2<T> {
-    fn from(vector: SfVector2<T>) -> Self {
-        Self {
-            x: vector.x,
-            y: vector.y,
-        }
     }
 }
 
@@ -199,15 +188,6 @@ impl Vector2f {
 
     /// A vector with components (1, 1).
     pub const UNIT: Self = Self { x: 1.0, y: 1.0 };
-}
-
-impl From<Vector2f> for SfVector2f {
-    fn from(vector: Vector2f) -> Self {
-        Self {
-            x: vector.x,
-            y: vector.y,
-        }
-    }
 }
 
 #[cfg(test)]

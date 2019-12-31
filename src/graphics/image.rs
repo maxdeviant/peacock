@@ -1,31 +1,52 @@
-use sfml::graphics::{Image as SfImage, Texture as SfTexture};
+use sdl2::image::LoadTexture;
+use sdl2::rect::Point;
+use sdl2::render::{Texture as SdlTexture, TextureCreator};
 
-use crate::error::Error;
-use crate::graphics::Color;
-use crate::{Result, Vector2u};
+use crate::graphics::{AssetRef, Color};
+use crate::{Context, Result, Vector2u};
 
-/// An image.
 #[derive(Debug)]
 pub struct Image {
-    pub(crate) texture: SfTexture,
+    pub(crate) texture: AssetRef,
 }
 
 impl Image {
-    /// Creates a new [`Image`] from a file.
-    pub fn from_file(filename: &str) -> Result<Self> {
-        let texture = SfTexture::from_file(filename).ok_or(Error)?;
-        Ok(Self { texture })
+    pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
+        let texture_creator = ctx.canvas.texture_creator();
+        let texture = texture_creator.load_texture(filename).unwrap();
+
+        let texture_ref = AssetRef(ctx.graphics.counter);
+
+        ctx.graphics.counter += 1;
+
+        ctx.graphics.textures.insert(texture_ref, texture);
+
+        Ok(Self {
+            texture: texture_ref,
+        })
     }
 
-    /// Creates a new [`Image`] and fills it with the specified [`Color`].
-    pub fn from_color(size: Vector2u, color: Color) -> Result<Self> {
-        let image = SfImage::from_color(size.x, size.y, &color.into()).ok_or(Error)?;
-        let texture = SfTexture::from_image(&image).ok_or(Error)?;
-        Ok(Self { texture })
-    }
+    pub fn from_color(ctx: &mut Context, size: Vector2u, color: Color) -> Result<Self> {
+        let texture_creator = ctx.canvas.texture_creator();
+        let mut texture = texture_creator
+            .create_texture_target(None, size.x, size.y)
+            .unwrap();
 
-    /// Returns the size of the [`Image`], in pixels.
-    pub fn size(&self) -> Vector2u {
-        self.texture.size().into()
+        ctx.canvas
+            .with_texture_canvas(&mut texture, |texture_canvas| {
+                texture_canvas.set_draw_color(color);
+                texture_canvas.clear();
+            })
+            .unwrap();
+
+        let texture_ref = AssetRef(ctx.graphics.counter);
+
+        ctx.graphics.counter += 1;
+
+        ctx.graphics.textures.insert(texture_ref, texture);
+
+        Ok(Self {
+            texture: texture_ref,
+        })
     }
 }

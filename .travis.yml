@@ -12,8 +12,9 @@ matrix:
 addons:
   apt:
     packages:
-    - libsfml-dev
-    - libcsfml-dev
+    - libsdl2-dev
+    - libsdl2-image-dev
+    - libsdl2-ttf-dev
 
 script:
   - cargo test --verbose

@@ -7,8 +7,8 @@ use peacock::time;
 use peacock::window;
 use peacock::{Context, ContextBuilder, Result, State, Vector2f};
 
-const WIDTH: i32 = 1920;
-const HEIGHT: i32 = 1080;
+const WIDTH: u32 = 1920;
+const HEIGHT: u32 = 1080;
 
 const INITIAL_ORCS: usize = 100;
 const ORC_SCALE: f32 = 2.0;
@@ -58,9 +58,9 @@ struct GameState {
 }
 
 impl GameState {
-    fn new() -> Self {
+    fn new(ctx: &mut Context) -> Self {
         let mut rng = rand::thread_rng();
-        let sprite_sheet = Image::from_file("examples/res/0x72_dungeon_ii.png")
+        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")
             .expect("Could not load sprite sheet!");
         let mut orcs = Vec::with_capacity(INITIAL_ORCS);
 
@@ -166,5 +166,5 @@ impl State for GameState {
 fn main() -> Result<()> {
     ContextBuilder::new("OrcMark", WIDTH, HEIGHT)
         .build()?
-        .run(&mut GameState::new())
+        .run_with(GameState::new)
 }

@@ -6,7 +6,7 @@ struct GameState {
 }
 
 impl GameState {
-    fn new() -> Result<Self> {
+    fn new(ctx: &mut Context) -> Result<Self> {
         let all_colors = vec![
             // Pinks
             Color::PINK,
@@ -163,7 +163,7 @@ impl GameState {
 
         let mut swatches = Vec::with_capacity(all_colors.len());
         for color in all_colors {
-            swatches.push(Image::from_color((32, 32).into(), color)?);
+            swatches.push(Image::from_color(ctx, (32, 32).into(), color)?);
         }
 
         Ok(Self { swatches })
@@ -203,7 +203,7 @@ impl State for GameState {
 }
 
 fn main() -> Result<()> {
-    let mut context = ContextBuilder::new("Color Palette", 384, 384).build()?;
-    let mut game_state = GameState::new()?;
-    context.run(&mut game_state)
+    ContextBuilder::new("Color Palette", 384, 384)
+        .build()?
+        .run_with_result(GameState::new)
 }

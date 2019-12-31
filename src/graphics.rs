@@ -1,29 +1,22 @@
 mod animation;
 mod color;
+mod context;
 mod font;
 mod image;
 mod rectangle;
-mod sprite_batch;
 mod text;
-mod texture_atlas;
 mod view;
 
 pub use self::animation::*;
 pub use self::color::*;
+pub(crate) use self::context::*;
 pub use self::font::*;
 pub use self::image::*;
 pub use self::rectangle::*;
-pub use self::sprite_batch::*;
 pub use self::text::*;
-pub use self::texture_atlas::*;
 pub use self::view::*;
 
-use sfml::graphics::{
-    Color as SfColor, Font as SfFont, RenderStates as SfRenderStates,
-    RenderTarget as SfRenderTarget, Sprite as SfSprite, Text as SfText,
-    Transformable as SfTransformable, VertexArray as SfVertexArray,
-};
-use sfml::system::Vector2f as SfVector2f;
+use sdl2::rect::Rect as SdlRect;
 
 use crate::{Context, Vector2f};
 
@@ -33,7 +26,8 @@ pub trait Drawable {
 
 /// Clears the screen using the given [`Color`].
 pub fn clear(ctx: &mut Context, color: Color) {
-    ctx.window.clear(&SfColor::from(color));
+    ctx.canvas.set_draw_color(color);
+    ctx.canvas.clear();
 }
 
 /// Draws a [`Drawable`] object to the current render target.
@@ -67,22 +61,36 @@ impl Default for DrawImageParams {
 
 /// Draws an [`Image`] to the current render target.
 pub fn draw_image(ctx: &mut Context, image: &Image, params: DrawImageParams) {
-    let mut sprite = SfSprite::with_texture(&image.texture);
-    sprite.set_position(SfVector2f::from(params.position));
+    let texture = ctx.graphics.textures.get(&image.texture).unwrap();
+    let texture_query = texture.query();
 
-    if let Some(clip_rect) = params.clip_rect {
-        sprite.set_texture_rect(&clip_rect.into());
-    }
+    let (width, height) = if let Some(clip_rect) = params.clip_rect {
+        (clip_rect.width, clip_rect.height)
+    } else {
+        (texture_query.width as i32, texture_query.height as i32)
+    };
 
-    if let Some(color) = params.color {
-        sprite.set_color(&color.into());
-    }
+    let clip_rect = if let Some(clip_rect) = params.clip_rect {
+        Some(SdlRect::new(
+            clip_rect.x,
+            clip_rect.y,
+            clip_rect.width as u32,
+            clip_rect.height as u32,
+        ))
+    } else {
+        None
+    };
 
-    if let Some(scale) = params.scale {
-        sprite.set_scale(scale);
-    }
-
-    ctx.window.draw_sprite(&sprite, SfRenderStates::default())
+    ctx.canvas.copy(
+        &texture,
+        clip_rect,
+        SdlRect::new(
+            params.position.x as i32,
+            params.position.y as i32,
+            width as u32,
+            height as u32,
+        ),
+    );
 }
 
 /// The parameters for drawing [`Text`] to the current render target.
@@ -94,19 +102,27 @@ pub struct DrawTextParams {
 
 /// Draws some [`Text`] to the current render target.
 pub fn draw_text(ctx: &mut Context, text: &Text, params: DrawTextParams) {
-    let font: SfFont = text.font.into();
-    let mut text = SfText::new(text.string, &font, text.size);
-    text.set_position(SfVector2f::from(params.position));
-    ctx.window.draw_text(&text, SfRenderStates::default())
-}
+    let texture_creator = ctx.canvas.texture_creator();
 
-/// Draws a [`VertexArray`] to the current render target.
-pub(crate) fn draw_vertex_array(ctx: &mut Context, vertex_array: &SfVertexArray, texture: &Image) {
-    ctx.window.draw_vertex_array(
-        vertex_array,
-        SfRenderStates {
-            texture: Some(&texture.texture),
-            ..Default::default()
-        },
-    )
+    let surface = text
+        .font
+        .font
+        .render(text.string)
+        .blended(Color::WHITE)
+        .unwrap();
+    let texture = texture_creator
+        .create_texture_from_surface(&surface)
+        .unwrap();
+    let texture_query = texture.query();
+
+    ctx.canvas.copy(
+        &texture,
+        None,
+        SdlRect::new(
+            params.position.x as i32,
+            params.position.y as i32,
+            texture_query.width as u32,
+            texture_query.height as u32,
+        ),
+    );
 }

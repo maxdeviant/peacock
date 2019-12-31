@@ -1,20 +1,27 @@
-use sfml::graphics::{RenderTarget as SfRenderTarget, View as SfView};
+use sdl2::rect::Rect as SdlRect;
 
 use crate::graphics::View;
 use crate::Context;
 
 /// Sets the title of the window.
 pub fn set_title(ctx: &mut Context, title: &str) {
-    ctx.window.set_title(title)
+    ctx.canvas.window_mut().set_title(title);
 }
 
 /// Sets a new view for the window.
 pub fn set_view(ctx: &mut Context, view: &View) {
-    let view: SfView = view.into();
-    ctx.window.set_view(&view);
+    ctx.canvas.set_viewport(SdlRect::new(
+        view.center.x as i32,
+        view.center.y as i32,
+        view.size.x as u32,
+        view.size.y as u32,
+    ));
+    ctx.canvas
+        .set_scale(view.zoom, view.zoom)
+        .expect("Failed to set scale!");
 }
 
 /// Sets whether the mouse cursor is visible in the window.
 pub fn set_mouse_cursor_visible(ctx: &mut Context, visible: bool) {
-    ctx.window.set_mouse_cursor_visible(visible);
+    ctx.sdl_context.mouse().show_cursor(visible);
 }

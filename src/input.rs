@@ -1,7 +1,8 @@
 pub mod mouse;
 
 use hashbrown::HashSet;
-use sfml::window::{Event as SfEvent, Key as SfKey};
+use sdl2::event::Event;
+use sdl2::keyboard::Keycode as SdlKeycode;
 
 use crate::{Context, Result, Vector2f};
 
@@ -170,62 +171,62 @@ pub enum Key {
     Space,
 }
 
-impl From<SfKey> for Key {
-    fn from(key: SfKey) -> Self {
+impl From<SdlKeycode> for Key {
+    fn from(key: SdlKeycode) -> Self {
         match key {
-            SfKey::A => Key::A,
-            SfKey::B => Key::B,
-            SfKey::C => Key::C,
-            SfKey::D => Key::D,
-            SfKey::E => Key::E,
-            SfKey::F => Key::F,
-            SfKey::G => Key::G,
-            SfKey::H => Key::H,
-            SfKey::I => Key::I,
-            SfKey::J => Key::J,
-            SfKey::K => Key::K,
-            SfKey::L => Key::L,
-            SfKey::M => Key::M,
-            SfKey::N => Key::N,
-            SfKey::O => Key::O,
-            SfKey::P => Key::P,
-            SfKey::Q => Key::Q,
-            SfKey::R => Key::R,
-            SfKey::S => Key::S,
-            SfKey::T => Key::T,
-            SfKey::U => Key::U,
-            SfKey::V => Key::V,
-            SfKey::W => Key::W,
-            SfKey::X => Key::X,
-            SfKey::Y => Key::Y,
-            SfKey::Z => Key::Z,
-            SfKey::Num0 => Key::Num0,
-            SfKey::Num1 => Key::Num1,
-            SfKey::Num2 => Key::Num2,
-            SfKey::Num3 => Key::Num3,
-            SfKey::Num4 => Key::Num4,
-            SfKey::Num5 => Key::Num5,
-            SfKey::Num6 => Key::Num6,
-            SfKey::Num7 => Key::Num7,
-            SfKey::Num8 => Key::Num8,
-            SfKey::Num9 => Key::Num9,
-            SfKey::F1 => Key::F1,
-            SfKey::F2 => Key::F2,
-            SfKey::F3 => Key::F3,
-            SfKey::F4 => Key::F4,
-            SfKey::F5 => Key::F5,
-            SfKey::F6 => Key::F6,
-            SfKey::F7 => Key::F7,
-            SfKey::F8 => Key::F8,
-            SfKey::F9 => Key::F9,
-            SfKey::F10 => Key::F10,
-            SfKey::F11 => Key::F11,
-            SfKey::F12 => Key::F12,
-            SfKey::Left => Key::Left,
-            SfKey::Right => Key::Right,
-            SfKey::Up => Key::Up,
-            SfKey::Down => Key::Down,
-            SfKey::Space => Key::Space,
+            SdlKeycode::A => Key::A,
+            SdlKeycode::B => Key::B,
+            SdlKeycode::C => Key::C,
+            SdlKeycode::D => Key::D,
+            SdlKeycode::E => Key::E,
+            SdlKeycode::F => Key::F,
+            SdlKeycode::G => Key::G,
+            SdlKeycode::H => Key::H,
+            SdlKeycode::I => Key::I,
+            SdlKeycode::J => Key::J,
+            SdlKeycode::K => Key::K,
+            SdlKeycode::L => Key::L,
+            SdlKeycode::M => Key::M,
+            SdlKeycode::N => Key::N,
+            SdlKeycode::O => Key::O,
+            SdlKeycode::P => Key::P,
+            SdlKeycode::Q => Key::Q,
+            SdlKeycode::R => Key::R,
+            SdlKeycode::S => Key::S,
+            SdlKeycode::T => Key::T,
+            SdlKeycode::U => Key::U,
+            SdlKeycode::V => Key::V,
+            SdlKeycode::W => Key::W,
+            SdlKeycode::X => Key::X,
+            SdlKeycode::Y => Key::Y,
+            SdlKeycode::Z => Key::Z,
+            SdlKeycode::Num0 => Key::Num0,
+            SdlKeycode::Num1 => Key::Num1,
+            SdlKeycode::Num2 => Key::Num2,
+            SdlKeycode::Num3 => Key::Num3,
+            SdlKeycode::Num4 => Key::Num4,
+            SdlKeycode::Num5 => Key::Num5,
+            SdlKeycode::Num6 => Key::Num6,
+            SdlKeycode::Num7 => Key::Num7,
+            SdlKeycode::Num8 => Key::Num8,
+            SdlKeycode::Num9 => Key::Num9,
+            SdlKeycode::F1 => Key::F1,
+            SdlKeycode::F2 => Key::F2,
+            SdlKeycode::F3 => Key::F3,
+            SdlKeycode::F4 => Key::F4,
+            SdlKeycode::F5 => Key::F5,
+            SdlKeycode::F6 => Key::F6,
+            SdlKeycode::F7 => Key::F7,
+            SdlKeycode::F8 => Key::F8,
+            SdlKeycode::F9 => Key::F9,
+            SdlKeycode::F10 => Key::F10,
+            SdlKeycode::F11 => Key::F11,
+            SdlKeycode::F12 => Key::F12,
+            SdlKeycode::Left => Key::Left,
+            SdlKeycode::Right => Key::Right,
+            SdlKeycode::Up => Key::Up,
+            SdlKeycode::Down => Key::Down,
+            SdlKeycode::Space => Key::Space,
             _ => Key::Unknown,
         }
     }
@@ -257,15 +258,19 @@ impl MouseContext {
     }
 }
 
-pub(crate) fn handle_event(ctx: &mut Context, event: SfEvent) -> Result<()> {
+pub(crate) fn handle_event(ctx: &mut Context, event: Event) -> Result<()> {
     match event {
-        SfEvent::KeyPressed { code: key, .. } => {
-            ctx.keyboard.pressed_keys.insert(key.into());
+        Event::KeyDown { keycode, .. } => {
+            if let Some(keycode) = keycode {
+                ctx.keyboard.pressed_keys.insert(keycode.into());
+            }
         }
-        SfEvent::KeyReleased { code: key, .. } => {
-            ctx.keyboard.pressed_keys.remove(&key.into());
+        Event::KeyUp { keycode, .. } => {
+            if let Some(keycode) = keycode {
+                ctx.keyboard.pressed_keys.remove(&keycode.into());
+            }
         }
-        SfEvent::MouseMoved { x, y } => {
+        Event::MouseMotion { x, y, .. } => {
             ctx.mouse.position = Vector2f::new(x as f32, y as f32);
         }
         _ => {}

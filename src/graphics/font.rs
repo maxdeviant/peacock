@@ -1,30 +1,27 @@
-use sfml::graphics::Font as SfFont;
+use std::fmt;
+
+use sdl2::ttf::Font as SdlFont;
 
 use crate::error::Error;
-use crate::Result;
+use crate::{Context, Result, SDL_TTF_CONTEXT};
 
 /// A font.
-#[derive(Debug)]
 pub struct Font {
-    font: SfFont,
+    pub(crate) font: SdlFont<'static, 'static>,
+}
+
+impl fmt::Debug for Font {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Font")
+    }
 }
 
 impl Font {
     /// Creates a new [`Font`] from a file.
-    pub fn from_file(filename: &str) -> Result<Self> {
-        let font = SfFont::from_file(filename).ok_or(Error)?;
-        Ok(Self { font })
-    }
-}
-
-impl From<Font> for SfFont {
-    fn from(font: Font) -> Self {
-        font.font
-    }
-}
-
-impl From<&Font> for SfFont {
-    fn from(font: &Font) -> Self {
-        font.font.clone()
+    pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
+        unsafe {
+            let font = SDL_TTF_CONTEXT.load_font(filename, 16).unwrap();
+            Ok(Self { font })
+        }
     }
 }

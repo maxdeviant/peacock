@@ -1,4 +1,4 @@
-use sfml::graphics::Color as SfColor;
+use sdl2::pixels::Color as SdlColor;
 
 /// An RGBA color.
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
@@ -195,8 +195,8 @@ impl Color {
     predefined_rgb!(YELLOW, 255, 255, 0);
 }
 
-impl From<SfColor> for Color {
-    fn from(color: SfColor) -> Self {
+impl From<SdlColor> for Color {
+    fn from(color: SdlColor) -> Self {
         Self {
             r: color.r,
             g: color.g,
@@ -206,7 +206,7 @@ impl From<SfColor> for Color {
     }
 }
 
-impl From<Color> for SfColor {
+impl From<Color> for SdlColor {
     fn from(color: Color) -> Self {
         Self {
             r: color.r,
