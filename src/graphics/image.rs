@@ -1,6 +1,4 @@
 use sdl2::image::LoadTexture;
-use sdl2::rect::Point;
-use sdl2::render::{Texture as SdlTexture, TextureCreator};
 
 use crate::graphics::{AssetRef, Color};
 use crate::{Context, Result, Vector2u};
