@@ -2,7 +2,6 @@ use std::fmt;
 
 use sdl2::ttf::Font as SdlFont;
 
-use crate::error::Error;
 use crate::{Context, Result, SDL_TTF_CONTEXT};
 
 /// A font.
