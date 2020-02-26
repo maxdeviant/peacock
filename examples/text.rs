@@ -9,7 +9,7 @@ struct GameState {
 impl GameState {
     fn new(ctx: &mut Context) -> Self {
         let font =
-            Font::from_file(ctx, "examples/res/Roboto-Regular.ttf").expect("Could not load font!");
+            Font::from_file(ctx, "examples/res/Roboto-Regular.ttf").expect("Could not load font");
 
         Self { font }
     }

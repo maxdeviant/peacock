@@ -18,7 +18,7 @@ pub fn set_view(ctx: &mut Context, view: &View) {
     ));
     ctx.canvas
         .set_scale(view.zoom, view.zoom)
-        .expect("Failed to set scale!");
+        .expect("Failed to set scale");
 }
 
 /// Sets whether the mouse cursor is visible in the window.

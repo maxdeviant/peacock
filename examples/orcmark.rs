@@ -61,7 +61,7 @@ impl GameState {
     fn new(ctx: &mut Context) -> Self {
         let mut rng = rand::thread_rng();
         let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")
-            .expect("Could not load sprite sheet!");
+            .expect("Could not load sprite sheet");
         let mut orcs = Vec::with_capacity(INITIAL_ORCS);
 
         for _ in 0..INITIAL_ORCS {

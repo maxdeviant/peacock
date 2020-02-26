@@ -9,7 +9,7 @@ struct GameState {
 impl GameState {
     fn new(ctx: &mut Context) -> Self {
         let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")
-            .expect("Could not load sprite sheet!");
+            .expect("Could not load sprite sheet");
 
         let animation = Animation::new(
             sprite_sheet,
