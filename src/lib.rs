@@ -11,6 +11,8 @@
 //! peacock = "0.0.1"
 //! ```
 
+#![warn(missing_docs)]
+
 pub mod error;
 pub mod graphics;
 pub mod input;
