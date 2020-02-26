@@ -283,10 +283,12 @@ pub(crate) fn cleanup_after_state_update(ctx: &mut Context) {
     ctx.keyboard.last_pressed_keys = ctx.keyboard.pressed_keys.clone();
 }
 
+/// Returns whether the specified [`Key`] is down.
 pub fn is_key_down(ctx: &Context, key: Key) -> bool {
     ctx.keyboard.pressed_keys.contains(&key)
 }
 
+/// Returns whether the specified [`Key`] is up.
 pub fn is_key_up(ctx: &Context, key: Key) -> bool {
     !ctx.keyboard.pressed_keys.contains(&key)
 }
