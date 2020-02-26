@@ -87,16 +87,14 @@ impl Drawable for Image {
             (texture_query.width as i32, texture_query.height as i32)
         };
 
-        let clip_rect = if let Some(clip_rect) = params.clip_rect {
-            Some(SdlRect::new(
+        let clip_rect = params.clip_rect.map(|clip_rect| {
+            SdlRect::new(
                 clip_rect.x,
                 clip_rect.y,
                 clip_rect.width as u32,
                 clip_rect.height as u32,
-            ))
-        } else {
-            None
-        };
+            )
+        });
 
         ctx.canvas
             .copy(
