@@ -96,6 +96,8 @@ impl Drawable for Image {
             )
         });
 
+        let scale = params.scale.unwrap_or(Vector2f::UNIT);
+
         ctx.canvas
             .copy(
                 &texture,
@@ -103,8 +105,8 @@ impl Drawable for Image {
                 SdlRect::new(
                     params.position.x as i32,
                     params.position.y as i32,
-                    width as u32,
-                    height as u32,
+                    (width as f32 * scale.x) as u32,
+                    (height as f32 * scale.y) as u32,
                 ),
             )
             .expect("Failed to copy texture to canvas");
