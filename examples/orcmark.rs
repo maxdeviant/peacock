@@ -138,10 +138,10 @@ impl State for GameState {
                 }
             };
 
-            graphics::draw_image(
+            graphics::draw(
                 ctx,
                 &self.sprite_sheet,
-                DrawImageParams {
+                &DrawImageParams {
                     position: orc.position,
                     clip_rect: Some(clip_rect),
                     scale: Some(Vector2f::new(ORC_SCALE, ORC_SCALE)),

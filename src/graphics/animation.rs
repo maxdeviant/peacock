@@ -1,5 +1,5 @@
-use crate::graphics::{self, DrawImageParams, Drawable, Image, Rectangle};
-use crate::Context;
+use crate::graphics::{Color, DrawImageParams, Drawable, Image, Rectangle};
+use crate::{Context, Vector2f};
 
 #[derive(Debug)]
 pub struct Animation {
@@ -43,14 +43,28 @@ impl Animation {
     }
 }
 
+/// The parameters for drawing an [`Animation`] to the current render target.
+#[derive(Debug, Default)]
+pub struct DrawAnimationParams {
+    /// The position at which to draw the [`Animation`].
+    pub position: Vector2f,
+
+    pub color: Option<Color>,
+
+    pub scale: Option<Vector2f>,
+}
+
 impl Drawable for Animation {
-    fn draw(&self, ctx: &mut Context) {
-        graphics::draw_image(
+    type Params = DrawAnimationParams;
+
+    fn draw(&self, ctx: &mut Context, params: &DrawAnimationParams) {
+        self.texture.draw(
             ctx,
-            &self.texture,
-            DrawImageParams {
+            &DrawImageParams {
                 clip_rect: Some(self.frames[self.current_frame]),
-                ..Default::default()
+                position: params.position,
+                color: params.color,
+                scale: params.scale,
             },
         )
     }

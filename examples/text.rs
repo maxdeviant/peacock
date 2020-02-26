@@ -26,10 +26,10 @@ impl State for GameState {
             &self.font,
             24,
         );
-        graphics::draw_text(
+        graphics::draw(
             ctx,
             &text,
-            DrawTextParams {
+            &DrawTextParams {
                 position: Vector2f::new(10.0, 10.0),
             },
         );

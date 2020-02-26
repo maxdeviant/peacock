@@ -1,4 +1,4 @@
-use peacock::graphics::{self, Animation, Image, Rectangle, View};
+use peacock::graphics::{self, Animation, DrawAnimationParams, Image, Rectangle, View};
 use peacock::window;
 use peacock::{Context, ContextBuilder, Result, State};
 
@@ -39,7 +39,13 @@ impl State for GameState {
 
         window::set_view(ctx, &view);
 
-        graphics::draw(ctx, &self.animation);
+        graphics::draw(
+            ctx,
+            &self.animation,
+            &DrawAnimationParams {
+                ..DrawAnimationParams::default()
+            },
+        );
 
         Ok(())
     }

@@ -187,10 +187,10 @@ impl State for GameState {
                     break;
                 }
 
-                graphics::draw_image(
+                graphics::draw(
                     ctx,
                     &self.swatches[index],
-                    DrawImageParams {
+                    &DrawImageParams {
                         position: (x as f32 * 32.0, y as f32 * 32.0).into(),
                         ..Default::default()
                     },
