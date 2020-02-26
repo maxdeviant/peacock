@@ -3,10 +3,9 @@ use std::time::{Duration, Instant};
 
 use lazy_static::*;
 use sdl2::event::Event;
-use sdl2::keyboard::Keycode;
-use sdl2::render::{Canvas, TextureCreator};
+use sdl2::render::Canvas;
 use sdl2::ttf::Sdl2TtfContext;
-use sdl2::video::{Window, WindowContext};
+use sdl2::video::Window;
 use sdl2::Sdl;
 
 use crate::error::Result;
@@ -164,7 +163,7 @@ impl<'a> ContextBuilder<'a> {
             .build()
             .unwrap();
 
-        let mut canvas = window.into_canvas().build().unwrap();
+        let canvas = window.into_canvas().build().unwrap();
 
         let mut fps_tracker = VecDeque::with_capacity(200);
         fps_tracker.resize(200, 1.0 / 60.0);

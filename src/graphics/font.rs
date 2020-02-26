@@ -18,6 +18,7 @@ impl fmt::Debug for Font {
 impl Font {
     /// Creates a new [`Font`] from a file.
     pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
+        let _ = ctx;
         let font = SDL_TTF_CONTEXT.load_font(filename, 16).unwrap();
         Ok(Self { font })
     }

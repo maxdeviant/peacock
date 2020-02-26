@@ -5,7 +5,10 @@ use crate::Context;
 
 /// Sets the title of the window.
 pub fn set_title(ctx: &mut Context, title: &str) {
-    ctx.canvas.window_mut().set_title(title);
+    ctx.canvas
+        .window_mut()
+        .set_title(title)
+        .expect("Failed to set window title");
 }
 
 /// Sets a new view for the window.
