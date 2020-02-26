@@ -47,6 +47,12 @@ If you're running a Debian or Ubuntu-based Linux distribution you can (most like
 sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
 ```
 
+### macOS
+
+```sh
+brew install sdl2 sdl2_image sdl2_ttf
+```
+
 For other platforms check out the [`rust-sdl2`](https://github.com/Rust-SDL2/rust-sdl2) docs.
 
 ## Usage
