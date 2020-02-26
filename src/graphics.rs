@@ -21,7 +21,7 @@ use crate::Context;
 pub trait Drawable {
     type Params;
 
-    fn draw(&self, context: &mut Context, params: &Self::Params);
+    fn draw(&self, ctx: &mut Context, params: &Self::Params);
 }
 
 /// Clears the screen using the given [`Color`].
