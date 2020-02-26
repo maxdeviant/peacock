@@ -16,5 +16,5 @@ pub fn f64_to_duration(duration: f64) -> Duration {
 }
 
 pub fn get_fps(ctx: &Context) -> f64 {
-    1.0 / (ctx.fps_tracker.iter().sum::<f64>() / ctx.fps_tracker.len() as f64)
+    ctx.fps_tracker.fps()
 }

@@ -23,8 +23,7 @@ pub struct Context {
     pub(crate) canvas: Canvas<Window>,
     is_running: bool,
     tick_rate: Duration,
-    // TODO: This should probably be in a dedicated struct. No primitive obsession!
-    pub(crate) fps_tracker: VecDeque<f64>,
+    pub(crate) fps_tracker: FpsTracker,
     pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
@@ -48,9 +47,7 @@ impl Context {
             last_time = current_time;
             lag += elapsed_time;
 
-            self.fps_tracker.pop_front();
-            self.fps_tracker
-                .push_back(time::duration_to_f64(elapsed_time));
+            self.fps_tracker.tick(elapsed_time);
 
             for event in event_pump.poll_iter() {
                 if let Err(err) = self
@@ -165,15 +162,12 @@ impl<'a> ContextBuilder<'a> {
 
         let canvas = window.into_canvas().build().unwrap();
 
-        let mut fps_tracker = VecDeque::with_capacity(200);
-        fps_tracker.resize(200, 1.0 / 60.0);
-
         Ok(Context {
             sdl_context,
             canvas,
             is_running: false,
             tick_rate: time::f64_to_duration(self.tick_rate),
-            fps_tracker,
+            fps_tracker: FpsTracker::new(),
             graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),
@@ -192,5 +186,27 @@ impl<'a> Default for ContextBuilder<'a> {
             fullscreen: false,
             quit_on_escape: true,
         }
+    }
+}
+
+pub(crate) struct FpsTracker {
+    samples: VecDeque<f64>,
+}
+
+impl FpsTracker {
+    fn new() -> Self {
+        let mut samples = VecDeque::with_capacity(200);
+        samples.resize(200, 1.0 / 60.0);
+
+        Self { samples }
+    }
+
+    pub(crate) fn fps(&self) -> f64 {
+        1.0 / (self.samples.iter().sum::<f64>() / self.samples.len() as f64)
+    }
+
+    fn tick(&mut self, elapsed_time: Duration) {
+        self.samples.pop_front();
+        self.samples.push_back(time::duration_to_f64(elapsed_time));
     }
 }
