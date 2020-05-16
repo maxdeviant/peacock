@@ -8,6 +8,7 @@ use sdl2::ttf::Sdl2TtfContext;
 use sdl2::video::Window;
 use sdl2::Sdl;
 
+use crate::ecs::World;
 use crate::error::Result;
 use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
@@ -24,6 +25,7 @@ pub struct Context {
     is_running: bool,
     tick_rate: Duration,
     pub(crate) fps_tracker: FpsTracker,
+    pub(crate) world: World,
     pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
@@ -168,6 +170,7 @@ impl<'a> ContextBuilder<'a> {
             is_running: false,
             tick_rate: time::f64_to_duration(self.tick_rate),
             fps_tracker: FpsTracker::new(),
+            world: World::new(),
             graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),

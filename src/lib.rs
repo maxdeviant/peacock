@@ -13,6 +13,7 @@
 
 #![warn(missing_docs)]
 
+pub mod ecs;
 pub mod error;
 pub mod graphics;
 pub mod input;
