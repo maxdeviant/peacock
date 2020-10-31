@@ -14,6 +14,7 @@ edition = "2018"
 maintenance = { status = "actively-developed" }
 
 [dependencies]
+anyhow = "1.0"
 hashbrown = "0.1.8"
 lazy_static = "1.0"
 rand = "0.6.5"
