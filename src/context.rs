@@ -32,6 +32,7 @@ pub struct Context {
 }
 
 impl Context {
+    /// Runs the context using the provided game state.
     pub fn run<S>(&mut self, state: &mut S) -> Result<()>
     where
         S: State,
@@ -88,6 +89,7 @@ impl Context {
         Ok(())
     }
 
+    /// Runs the context using the game state returned from the provided function.
     pub fn run_with<F, S>(&mut self, get_state: F) -> Result<()>
     where
         S: State,
@@ -97,6 +99,7 @@ impl Context {
         self.run(&mut state)
     }
 
+    /// Runs the context using the game state returned from the provided (fallible) function.
     pub fn run_with_result<F, S>(&mut self, get_state: F) -> Result<()>
     where
         S: State,
