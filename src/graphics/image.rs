@@ -85,7 +85,7 @@ impl Default for DrawImageParams {
 impl Drawable for Image {
     type Params = DrawImageParams;
 
-    fn draw(&self, ctx: &mut Context, params: &DrawImageParams) {
+    fn draw(&self, ctx: &mut Context, params: &DrawImageParams) -> Result<()> {
         let texture = ctx.graphics.textures.get(&self.texture).unwrap();
         let texture_query = texture.query();
 
@@ -117,6 +117,7 @@ impl Drawable for Image {
                     (height as f32 * scale.y) as u32,
                 ),
             )
-            .expect("Failed to copy texture to canvas");
+            .map_err(Sdl2Error::ErrorMessage)
+            .context("Failed to copy texture to canvas")
     }
 }

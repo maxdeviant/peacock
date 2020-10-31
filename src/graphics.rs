@@ -16,12 +16,12 @@ pub use self::rectangle::*;
 pub use self::text::*;
 pub use self::view::*;
 
-use crate::Context;
+use crate::{Context, Result};
 
 pub trait Drawable {
     type Params;
 
-    fn draw(&self, ctx: &mut Context, params: &Self::Params);
+    fn draw(&self, ctx: &mut Context, params: &Self::Params) -> Result<()>;
 }
 
 /// Clears the screen using the given [`Color`].
@@ -31,6 +31,6 @@ pub fn clear(ctx: &mut Context, color: Color) {
 }
 
 /// Draws a [`Drawable`] object to the current render target.
-pub fn draw<D: Drawable>(ctx: &mut Context, drawable: &D, params: &D::Params) {
+pub fn draw<D: Drawable>(ctx: &mut Context, drawable: &D, params: &D::Params) -> Result<()> {
     drawable.draw(ctx, params)
 }

@@ -45,7 +45,7 @@ impl State for GameState {
             &DrawAnimationParams {
                 ..DrawAnimationParams::default()
             },
-        );
+        )?;
 
         Ok(())
     }

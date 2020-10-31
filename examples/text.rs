@@ -32,7 +32,7 @@ impl State for GameState {
             &DrawTextParams {
                 position: Vector2f::new(10.0, 10.0),
             },
-        );
+        )?;
 
         Ok(())
     }

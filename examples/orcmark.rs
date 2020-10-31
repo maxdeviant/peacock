@@ -147,7 +147,7 @@ impl State for GameState {
                     scale: Some(Vector2f::new(ORC_SCALE, ORC_SCALE)),
                     ..Default::default()
                 },
-            );
+            )?;
         }
 
         window::set_title(

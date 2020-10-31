@@ -194,7 +194,7 @@ impl State for GameState {
                         position: (x as f32 * 32.0, y as f32 * 32.0).into(),
                         ..Default::default()
                     },
-                )
+                )?;
             }
         }
 

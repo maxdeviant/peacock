@@ -1,5 +1,5 @@
 use crate::graphics::{Color, DrawImageParams, Drawable, Image, Rectangle};
-use crate::{Context, Vector2f};
+use crate::{Context, Result, Vector2f};
 
 #[derive(Debug)]
 pub struct Animation {
@@ -57,7 +57,7 @@ pub struct DrawAnimationParams {
 impl Drawable for Animation {
     type Params = DrawAnimationParams;
 
-    fn draw(&self, ctx: &mut Context, params: &DrawAnimationParams) {
+    fn draw(&self, ctx: &mut Context, params: &DrawAnimationParams) -> Result<()> {
         self.texture.draw(
             ctx,
             &DrawImageParams {

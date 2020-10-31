@@ -4,7 +4,7 @@ use sdl2::rect::Rect as SdlRect;
 use crate::error::Sdl2Error;
 use crate::graphics::{Color, Drawable, Font};
 use crate::vector2::Vector2f;
-use crate::Context;
+use crate::{Context, Result};
 
 #[derive(Debug)]
 pub struct Text<'a> {
@@ -29,7 +29,7 @@ pub struct DrawTextParams {
 impl<'a> Drawable for Text<'a> {
     type Params = DrawTextParams;
 
-    fn draw(&self, ctx: &mut Context, params: &DrawTextParams) {
+    fn draw(&self, ctx: &mut Context, params: &DrawTextParams) -> Result<()> {
         let texture_creator = ctx.canvas.texture_creator();
 
         let surface = self
@@ -37,11 +37,8 @@ impl<'a> Drawable for Text<'a> {
             .font
             .render(self.string)
             .blended(Color::WHITE)
-            .map_err(Sdl2Error::FontError)
-            .unwrap();
-        let texture = texture_creator
-            .create_texture_from_surface(&surface)
-            .unwrap();
+            .map_err(Sdl2Error::FontError)?;
+        let texture = texture_creator.create_texture_from_surface(&surface)?;
         let texture_query = texture.query();
         ctx.canvas
             .copy(
@@ -56,6 +53,5 @@ impl<'a> Drawable for Text<'a> {
             )
             .map_err(Sdl2Error::ErrorMessage)
             .context("Failed to copy texture to canvas")
-            .unwrap();
     }
 }
