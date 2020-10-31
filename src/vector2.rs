@@ -188,6 +188,14 @@ impl Vector2f {
 
     /// A vector with components (1, 1).
     pub const UNIT: Self = Self { x: 1.0, y: 1.0 };
+
+    pub fn normalize(self) -> Self {
+        let value = 1.0 / f32::sqrt((self.x * self.x) + (self.y * self.y));
+        Self {
+            x: self.x * value,
+            y: self.y * value,
+        }
+    }
 }
 
 #[cfg(test)]
