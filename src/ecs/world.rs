@@ -62,7 +62,7 @@ impl World {
         &mut self,
         entity: Entity,
         component_type: TypeId,
-        component: Box<dyn Component>,
+        component: Box<dyn Any>,
     ) {
         let components = self
             .components
@@ -76,7 +76,7 @@ impl World {
             );
         }
 
-        components[entity.id() as usize] = Some(Box::new(component));
+        components[entity.id() as usize] = Some(component);
     }
 
     pub fn remove_component(&mut self, entity: Entity, component_type: TypeId) {
@@ -90,5 +90,38 @@ impl World {
         }
 
         components[entity.id() as usize] = None;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use crate::Vector2f;
+
+    #[derive(Debug)]
+    struct Transform {
+        pub position: Vector2f,
+    }
+
+    impl Component for Transform {}
+
+    #[test]
+    fn get_component_works() {
+        let mut world = World::new();
+
+        let entity = world
+            .create_entity()
+            .with(Transform {
+                position: Vector2f::new(10.0, 10.0),
+            })
+            .build();
+
+        let transform = world.get_component::<Transform>(entity);
+
+        assert_eq!(
+            transform.map(|transform| transform.position),
+            Some(Vector2f::new(10.0, 10.0))
+        );
     }
 }
