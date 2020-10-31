@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
+use anyhow::Context as AnyhowContext;
 use lazy_static::*;
 use sdl2::event::Event;
 use sdl2::render::Canvas;
@@ -9,7 +10,7 @@ use sdl2::video::Window;
 use sdl2::Sdl;
 
 use crate::ecs::World;
-use crate::error::Result;
+use crate::error::{Result, Sdl2Error};
 use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
@@ -42,7 +43,11 @@ impl Context {
 
         self.is_running = true;
 
-        let mut event_pump = self.sdl_context.event_pump().unwrap();
+        let mut event_pump = self
+            .sdl_context
+            .event_pump()
+            .map_err(Sdl2Error::ErrorMessage)
+            .context("Failed to obtain the SDL2 event pump")?;
 
         while self.is_running {
             let current_time = Instant::now();
@@ -156,16 +161,24 @@ impl<'a> ContextBuilder<'a> {
     }
 
     pub fn build(&self) -> Result<Context> {
-        let sdl_context = sdl2::init().unwrap();
-        let video_subsystem = sdl_context.video().unwrap();
+        let sdl_context = sdl2::init()
+            .map_err(Sdl2Error::ErrorMessage)
+            .context("Failed to initialize SDL2 context")?;
+        let video_subsystem = sdl_context
+            .video()
+            .map_err(Sdl2Error::ErrorMessage)
+            .context("Failed to initialize SDL2 video subsystem")?;
 
         let window = video_subsystem
             .window(self.title, self.width, self.height)
             .position_centered()
             .build()
-            .unwrap();
+            .context("Failed to build SDL2 window")?;
 
-        let canvas = window.into_canvas().build().unwrap();
+        let canvas = window
+            .into_canvas()
+            .build()
+            .context("Failed to build SDL2 canvas")?;
 
         Ok(Context {
             sdl_context,

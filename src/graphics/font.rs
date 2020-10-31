@@ -1,7 +1,9 @@
 use std::fmt;
 
-use sdl2::ttf::Font as SdlFont;
+use anyhow::Context as AnyhowContext;
+use sdl2::ttf::{Font as SdlFont, FontError as SdlFontError};
 
+use crate::error::Sdl2Error;
 use crate::{Context, Result, SDL_TTF_CONTEXT};
 
 /// A font.
@@ -19,7 +21,11 @@ impl Font {
     /// Creates a new [`Font`] from a file.
     pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
         let _ = ctx;
-        let font = SDL_TTF_CONTEXT.load_font(filename, 16).unwrap();
+        let font = SDL_TTF_CONTEXT
+            .load_font(filename, 16)
+            .map_err(SdlFontError::SdlError)
+            .map_err(Sdl2Error::FontError)
+            .with_context(|| format!("Failed to create font from file: {}", filename))?;
         Ok(Self { font })
     }
 }

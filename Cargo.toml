@@ -19,3 +19,4 @@ hashbrown = "0.1.8"
 lazy_static = "1.0"
 rand = "0.6.5"
 sdl2 = { version = "0.32", features = ["image", "ttf", "unsafe_textures"] }
+thiserror = "1.0"

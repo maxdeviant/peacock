@@ -1,6 +1,9 @@
 use sdl2::image::LoadTexture;
 use sdl2::rect::Rect as SdlRect;
 
+use anyhow::Context as AnyhowContext;
+
+use crate::error::Sdl2Error;
 use crate::graphics::{AssetRef, Color, Drawable, Rectangle};
 use crate::{Context, Result, Vector2f, Vector2u};
 
@@ -12,7 +15,10 @@ pub struct Image {
 impl Image {
     pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
         let texture_creator = ctx.canvas.texture_creator();
-        let texture = texture_creator.load_texture(filename).unwrap();
+        let texture = texture_creator
+            .load_texture(filename)
+            .map_err(Sdl2Error::ErrorMessage)
+            .with_context(|| format!("Failed to create image from file: {}", filename))?;
 
         let texture_ref = AssetRef(ctx.graphics.counter);
 
@@ -26,17 +32,19 @@ impl Image {
     }
 
     pub fn from_color(ctx: &mut Context, size: Vector2u, color: Color) -> Result<Self> {
+        const ERROR_CONTEXT: &'static str = "Failed to create image from color";
+
         let texture_creator = ctx.canvas.texture_creator();
         let mut texture = texture_creator
             .create_texture_target(None, size.x, size.y)
-            .unwrap();
+            .context(ERROR_CONTEXT)?;
 
         ctx.canvas
             .with_texture_canvas(&mut texture, |texture_canvas| {
                 texture_canvas.set_draw_color(color);
                 texture_canvas.clear();
             })
-            .unwrap();
+            .context(ERROR_CONTEXT)?;
 
         let texture_ref = AssetRef(ctx.graphics.counter);
 
