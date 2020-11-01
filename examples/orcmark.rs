@@ -58,22 +58,21 @@ struct GameState {
 }
 
 impl GameState {
-    fn new(ctx: &mut Context) -> Self {
+    fn new(ctx: &mut Context) -> Result<Self> {
         let mut rng = rand::thread_rng();
-        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")
-            .expect("Could not load sprite sheet");
+        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
         let mut orcs = Vec::with_capacity(INITIAL_ORCS);
 
         for _ in 0..INITIAL_ORCS {
             orcs.push(Orc::new(&mut rng));
         }
 
-        Self {
+        Ok(Self {
             rng,
             sprite_sheet,
             orcs,
             spawn_timer: 0,
-        }
+        })
     }
 }
 
@@ -166,5 +165,5 @@ impl State for GameState {
 fn main() -> Result<()> {
     ContextBuilder::new("OrcMark", WIDTH, HEIGHT)
         .build()?
-        .run_with(GameState::new)
+        .run_with_result(GameState::new)
 }

@@ -7,9 +7,8 @@ struct GameState {
 }
 
 impl GameState {
-    fn new(ctx: &mut Context) -> Self {
-        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")
-            .expect("Could not load sprite sheet");
+    fn new(ctx: &mut Context) -> Result<Self> {
+        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
 
         let animation = Animation::new(
             sprite_sheet,
@@ -22,7 +21,7 @@ impl GameState {
             8,
         );
 
-        Self { animation }
+        Ok(Self { animation })
     }
 }
 
@@ -54,5 +53,5 @@ impl State for GameState {
 fn main() -> Result<()> {
     ContextBuilder::new("Animation", 1920, 1080)
         .build()?
-        .run_with(GameState::new)
+        .run_with_result(GameState::new)
 }
