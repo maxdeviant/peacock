@@ -1,7 +1,6 @@
-use anyhow::Context as AnyhowContext;
 use sdl2::rect::Rect as SdlRect;
 
-use crate::error::Sdl2Error;
+use crate::error::{AnyhowContext, Sdl2Error};
 use crate::graphics::{Color, Drawable, Font};
 use crate::vector2::Vector2f;
 use crate::{Context, Result};

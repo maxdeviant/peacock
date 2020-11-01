@@ -1,9 +1,7 @@
 use sdl2::image::LoadTexture;
 use sdl2::rect::Rect as SdlRect;
 
-use anyhow::Context as AnyhowContext;
-
-use crate::error::Sdl2Error;
+use crate::error::{AnyhowContext, Sdl2Error};
 use crate::graphics::{AssetRef, Color, Drawable, Rectangle};
 use crate::{Context, Result, Vector2f, Vector2u};
 

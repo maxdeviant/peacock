@@ -1,6 +1,7 @@
 use sdl2::ttf::FontError;
 use thiserror::Error;
 
+pub(crate) use anyhow::Context as AnyhowContext;
 pub use anyhow::Result;
 
 /// An error originating from SDL2.

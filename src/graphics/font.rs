@@ -1,9 +1,8 @@
 use std::fmt;
 
-use anyhow::Context as AnyhowContext;
 use sdl2::ttf::{Font as SdlFont, FontError as SdlFontError};
 
-use crate::error::Sdl2Error;
+use crate::error::{AnyhowContext, Sdl2Error};
 use crate::{Context, Result, SDL_TTF_CONTEXT};
 
 /// A font.

@@ -1,7 +1,6 @@
 use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
-use anyhow::Context as AnyhowContext;
 use lazy_static::*;
 use sdl2::event::Event;
 use sdl2::render::Canvas;
@@ -10,7 +9,7 @@ use sdl2::video::Window;
 use sdl2::Sdl;
 
 use crate::ecs::World;
-use crate::error::{Result, Sdl2Error};
+use crate::error::{AnyhowContext, Result, Sdl2Error};
 use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
