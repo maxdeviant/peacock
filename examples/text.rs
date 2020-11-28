@@ -31,6 +31,7 @@ impl State for GameState {
             &self.greeting_message,
             &DrawTextParams {
                 position: Vector2f::new(10.0, 10.0),
+                ..Default::default()
             },
         )?;
 

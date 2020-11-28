@@ -37,18 +37,33 @@ impl Text {
 }
 
 /// The parameters for drawing [`Text`] to the current render target.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct DrawTextParams {
     /// The position at which to draw the [`Text`].
     pub position: Vector2f,
+
+    /// The color with which to draw the [`Text`].
+    pub color: Option<Color>,
+}
+
+impl Default for DrawTextParams {
+    fn default() -> Self {
+        Self {
+            position: Vector2f::ZERO,
+            color: None,
+        }
+    }
 }
 
 impl Drawable for Text {
     type Params = DrawTextParams;
 
     fn draw(&self, ctx: &mut Context, params: &DrawTextParams) -> Result<()> {
-        let texture = ctx.graphics.textures.get(&self.texture).unwrap();
+        let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
+
+        let color = params.color.unwrap_or(Color::WHITE);
+        texture.set_color_mod(color.r, color.g, color.b);
 
         ctx.canvas
             .copy(
