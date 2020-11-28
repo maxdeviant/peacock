@@ -8,7 +8,7 @@ struct GameState {
 
 impl GameState {
     fn new(ctx: &mut Context) -> Result<Self> {
-        let font = Font::from_file(ctx, "examples/res/Roboto-Regular.ttf")?;
+        let font = Font::from_file(ctx, "examples/res/Roboto-Regular.ttf", 24)?;
 
         Ok(Self { font })
     }
@@ -23,7 +23,6 @@ impl State for GameState {
         let text = Text::new(
             "Hello, world!\n\nI hope you enjoy using Peacock!",
             &self.font,
-            24,
         );
         graphics::draw(
             ctx,

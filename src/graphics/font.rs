@@ -18,10 +18,10 @@ impl fmt::Debug for Font {
 
 impl Font {
     /// Creates a new [`Font`] from a file.
-    pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
+    pub fn from_file(ctx: &mut Context, filename: &str, size: u16) -> Result<Self> {
         let _ = ctx;
         let font = SDL_TTF_CONTEXT
-            .load_font(filename, 16)
+            .load_font(filename, size)
             .map_err(SdlFontError::SdlError)
             .map_err(Sdl2Error::FontError)
             .with_context(|| format!("Failed to create font from file: {}", filename))?;
