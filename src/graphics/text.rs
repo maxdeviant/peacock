@@ -50,6 +50,12 @@ impl<'a> Drawable for Text<'a> {
                 ),
             )
             .map_err(Sdl2Error::ErrorMessage)
-            .context("Failed to copy texture to canvas")
+            .context("Failed to copy texture to canvas")?;
+
+        unsafe {
+            texture.destroy();
+        }
+
+        Ok(())
     }
 }
