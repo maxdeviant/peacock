@@ -84,7 +84,7 @@ impl Drawable for Image {
     type Params = DrawImageParams;
 
     fn draw(&self, ctx: &mut Context, params: &DrawImageParams) -> Result<()> {
-        let texture = ctx.graphics.textures.get(&self.texture).unwrap();
+        let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
 
         let (width, height) = if let Some(clip_rect) = params.clip_rect {
@@ -103,6 +103,9 @@ impl Drawable for Image {
         });
 
         let scale = params.scale.unwrap_or(Vector2f::UNIT);
+
+        let color = params.color.unwrap_or(Color::WHITE);
+        texture.set_color_mod(color.r, color.g, color.b);
 
         ctx.canvas
             .copy(
