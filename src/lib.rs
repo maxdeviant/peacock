@@ -21,10 +21,12 @@ pub mod time;
 pub mod window;
 
 mod context;
+mod fps_tracker;
 mod vector2;
 
 pub use crate::context::*;
 pub use crate::error::Result;
+pub(crate) use crate::fps_tracker::*;
 pub use crate::vector2::*;
 
 pub trait State {

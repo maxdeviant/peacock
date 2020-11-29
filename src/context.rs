@@ -1,4 +1,3 @@
-use std::collections::VecDeque;
 use std::time::{Duration, Instant};
 
 use lazy_static::*;
@@ -13,7 +12,7 @@ use crate::error::{AnyhowContext, Result, Sdl2Error};
 use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
-use crate::State;
+use crate::{FpsTracker, State};
 
 lazy_static! {
     pub(crate) static ref SDL_TTF_CONTEXT: Sdl2TtfContext = sdl2::ttf::init().unwrap();
@@ -204,27 +203,5 @@ impl<'a> Default for ContextBuilder<'a> {
             fullscreen: false,
             quit_on_escape: true,
         }
-    }
-}
-
-pub(crate) struct FpsTracker {
-    samples: VecDeque<f64>,
-}
-
-impl FpsTracker {
-    fn new() -> Self {
-        let mut samples = VecDeque::with_capacity(200);
-        samples.resize(200, 1.0 / 60.0);
-
-        Self { samples }
-    }
-
-    pub(crate) fn fps(&self) -> f64 {
-        1.0 / (self.samples.iter().sum::<f64>() / self.samples.len() as f64)
-    }
-
-    fn tick(&mut self, elapsed_time: Duration) {
-        self.samples.pop_front();
-        self.samples.push_back(time::duration_to_f64(elapsed_time));
     }
 }
