@@ -4,6 +4,7 @@ use peacock::{Context, ContextBuilder, State, Vector2f};
 
 struct GameState {
     greeting_message: Text,
+    centered_text: Text,
 }
 
 impl GameState {
@@ -16,7 +17,12 @@ impl GameState {
             &font,
         )?;
 
-        Ok(Self { greeting_message })
+        let centered_text = Text::new(ctx, "This text is centered on the screen", &font)?;
+
+        Ok(Self {
+            greeting_message,
+            centered_text,
+        })
     }
 }
 
@@ -31,6 +37,15 @@ impl State for GameState {
             &self.greeting_message,
             &DrawTextParams {
                 position: Vector2f::new(10.0, 10.0),
+                ..Default::default()
+            },
+        )?;
+
+        graphics::draw(
+            ctx,
+            &self.centered_text,
+            &DrawTextParams {
+                position: Vector2f::new((1920 / 2 - self.centered_text.size().x / 2) as f32, 50.0),
                 ..Default::default()
             },
         )?;

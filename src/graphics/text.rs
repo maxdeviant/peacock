@@ -3,12 +3,13 @@ use sdl2::rect::Rect as SdlRect;
 use crate::error::{AnyhowContext, Sdl2Error};
 use crate::graphics::{AssetRef, Color, Drawable, Font};
 use crate::vector2::Vector2f;
-use crate::{Context, Result};
+use crate::{Context, Result, Vector2u};
 
 #[derive(Debug)]
 pub struct Text {
     pub(crate) string: String,
     pub(crate) texture: AssetRef,
+    size: Vector2u,
 }
 
 impl Text {
@@ -22,6 +23,7 @@ impl Text {
             .blended(Color::WHITE)
             .map_err(Sdl2Error::FontError)?;
         let texture = texture_creator.create_texture_from_surface(&surface)?;
+        let texture_query = texture.query();
 
         let texture_ref = AssetRef(ctx.graphics.counter);
 
@@ -32,7 +34,13 @@ impl Text {
         Ok(Self {
             string,
             texture: texture_ref,
+            size: (texture_query.width, texture_query.height).into(),
         })
+    }
+
+    /// Returns the size of the rendered text.
+    pub fn size(&self) -> Vector2u {
+        self.size
     }
 }
 
