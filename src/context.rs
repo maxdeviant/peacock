@@ -32,6 +32,25 @@ pub struct Context<G> {
 }
 
 impl<G> Context<G> {
+    /// Returns the game context.
+    pub fn game<'a, 'b>(&'a self) -> &'b G {
+        // Extend the lifetime of the game context so that we can borrow it at
+        // the same time as the rest of the context.
+        //
+        // This *should* be safe because:
+        //   (1) The game context is opaque within Peacock, so nothing in the
+        //       engine will be modifying it,
+        //   (2) the game context is not modifiable externally unless
+        //   (3) the caller obtains a mutable reference with `game_mut`, which
+        //       is then checked by the borrow checker.
+        unsafe { std::mem::transmute(&self.game) }
+    }
+
+    /// Returns a mutable reference to game context.
+    pub fn game_mut(&mut self) -> &mut G {
+        &mut self.game
+    }
+
     /// Runs the context using the provided game state.
     pub fn run<S>(&mut self, state: &mut S) -> Result<()>
     where
