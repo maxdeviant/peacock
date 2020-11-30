@@ -258,7 +258,7 @@ impl MouseContext {
     }
 }
 
-pub(crate) fn handle_event(ctx: &mut Context, event: Event) -> Result<()> {
+pub(crate) fn handle_event<G>(ctx: &mut Context<G>, event: Event) -> Result<()> {
     match event {
         Event::KeyDown { keycode, .. } => {
             if let Some(keycode) = keycode {
@@ -279,24 +279,24 @@ pub(crate) fn handle_event(ctx: &mut Context, event: Event) -> Result<()> {
     Ok(())
 }
 
-pub(crate) fn cleanup_after_state_update(ctx: &mut Context) {
+pub(crate) fn cleanup_after_state_update<G>(ctx: &mut Context<G>) {
     ctx.keyboard.last_pressed_keys = ctx.keyboard.pressed_keys.clone();
 }
 
 /// Returns whether the specified [`Key`] is down.
-pub fn is_key_down(ctx: &Context, key: Key) -> bool {
+pub fn is_key_down<G>(ctx: &Context<G>, key: Key) -> bool {
     ctx.keyboard.pressed_keys.contains(&key)
 }
 
 /// Returns whether the specified [`Key`] is up.
-pub fn is_key_up(ctx: &Context, key: Key) -> bool {
+pub fn is_key_up<G>(ctx: &Context<G>, key: Key) -> bool {
     !ctx.keyboard.pressed_keys.contains(&key)
 }
 
-pub fn was_key_pressed(ctx: &Context, key: Key) -> bool {
+pub fn was_key_pressed<G>(ctx: &Context<G>, key: Key) -> bool {
     !ctx.keyboard.last_pressed_keys.contains(&key) && is_key_down(ctx, key)
 }
 
-pub fn was_key_released(ctx: &Context, key: Key) -> bool {
+pub fn was_key_released<G>(ctx: &Context<G>, key: Key) -> bool {
     ctx.keyboard.last_pressed_keys.contains(&key) && is_key_up(ctx, key)
 }

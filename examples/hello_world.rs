@@ -1,9 +1,13 @@
 use peacock::Result;
-use peacock::{Context, ContextBuilder, State};
+use peacock::{ContextBuilder, State};
 
-struct GameState;
+type Context = peacock::Context<()>;
 
-impl State for GameState {
+struct HelloWorldExample;
+
+impl State for HelloWorldExample {
+    type Context = ();
+
     fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
@@ -15,6 +19,6 @@ impl State for GameState {
 
 fn main() -> Result<()> {
     ContextBuilder::new("Hello, world!", 1920, 1080)
-        .build()?
-        .run(&mut GameState)
+        .build_empty()?
+        .run(&mut HelloWorldExample)
 }

@@ -1,13 +1,15 @@
 use peacock::graphics::{self, DrawTextParams, Font, Text};
 use peacock::Result;
-use peacock::{Context, ContextBuilder, State, Vector2f};
+use peacock::{ContextBuilder, State, Vector2f};
 
-struct GameState {
+type Context = peacock::Context<()>;
+
+struct TextExample {
     greeting_message: Text,
     centered_text: Text,
 }
 
-impl GameState {
+impl TextExample {
     fn new(ctx: &mut Context) -> Result<Self> {
         let font = Font::from_file(ctx, "examples/res/Roboto-Regular.ttf", 24)?;
 
@@ -26,7 +28,9 @@ impl GameState {
     }
 }
 
-impl State for GameState {
+impl State for TextExample {
+    type Context = ();
+
     fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
@@ -56,6 +60,6 @@ impl State for GameState {
 
 fn main() -> Result<()> {
     ContextBuilder::new("Text", 1920, 1080)
-        .build()?
-        .run_with_result(GameState::new)
+        .build_empty()?
+        .run_with_result(TextExample::new)
 }

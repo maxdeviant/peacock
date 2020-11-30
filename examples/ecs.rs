@@ -2,7 +2,9 @@ use peacock::ecs::{self, Component, Entity};
 use peacock::graphics::{self, DrawImageParams, Image, Rectangle};
 use peacock::input::{self, Key};
 use peacock::Result;
-use peacock::{Context, ContextBuilder, State, Vector2f};
+use peacock::{ContextBuilder, State, Vector2f};
+
+type Context = peacock::Context<()>;
 
 #[derive(Debug)]
 struct Transform {
@@ -18,12 +20,12 @@ struct StaticSprite {
 
 impl Component for StaticSprite {}
 
-struct GameState {
+struct EcsExample {
     sprite_sheet: Image,
     player: Entity,
 }
 
-impl GameState {
+impl EcsExample {
     fn new(ctx: &mut Context) -> Result<Self> {
         let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
 
@@ -36,14 +38,15 @@ impl GameState {
             })
             .build();
 
-        Ok(GameState {
+        Ok(Self {
             sprite_sheet,
             player,
         })
     }
 }
 
-impl State for GameState {
+impl State for EcsExample {
+    type Context = ();
     fn update(&mut self, ctx: &mut Context) -> Result<()> {
         let direction = {
             let mut direction = Vector2f::ZERO;
@@ -71,7 +74,7 @@ impl State for GameState {
             }
         };
 
-        if let Some(transform) = ecs::get_component_mut::<Transform>(ctx, self.player) {
+        if let Some(transform) = ecs::get_component_mut::<_, Transform>(ctx, self.player) {
             let speed = 10.0;
 
             transform.position += direction * speed;
@@ -82,8 +85,8 @@ impl State for GameState {
 
     fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         for entity in ecs::entities(ctx) {
-            let transform = ecs::get_component::<Transform>(ctx, entity);
-            let static_sprite = ecs::get_component::<StaticSprite>(ctx, entity);
+            let transform = ecs::get_component::<_, Transform>(ctx, entity);
+            let static_sprite = ecs::get_component::<_, StaticSprite>(ctx, entity);
 
             match (transform, static_sprite) {
                 (Some(transform), Some(static_sprite)) => {
@@ -106,6 +109,6 @@ impl State for GameState {
 
 fn main() -> Result<()> {
     ContextBuilder::new("Entity Component System", 1920, 1080)
-        .build()?
-        .run_with_result(GameState::new)
+        .build_empty()?
+        .run_with_result(EcsExample::new)
 }

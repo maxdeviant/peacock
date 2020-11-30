@@ -1,12 +1,14 @@
 use peacock::graphics::{self, Animation, DrawAnimationParams, Image, Rectangle, View};
 use peacock::window;
-use peacock::{Context, ContextBuilder, Result, State};
+use peacock::{ContextBuilder, Result, State};
 
-struct GameState {
+type Context = peacock::Context<()>;
+
+struct AnimationExample {
     animation: Animation,
 }
 
-impl GameState {
+impl AnimationExample {
     fn new(ctx: &mut Context) -> Result<Self> {
         let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
 
@@ -25,7 +27,9 @@ impl GameState {
     }
 }
 
-impl State for GameState {
+impl State for AnimationExample {
+    type Context = ();
+
     fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         self.animation.tick();
 
@@ -52,6 +56,6 @@ impl State for GameState {
 
 fn main() -> Result<()> {
     ContextBuilder::new("Animation", 1920, 1080)
-        .build()?
-        .run_with_result(GameState::new)
+        .build_empty()?
+        .run_with_result(AnimationExample::new)
 }

@@ -1,11 +1,13 @@
 use peacock::graphics::{self, Color, DrawImageParams, Image};
-use peacock::{Context, ContextBuilder, Result, State};
+use peacock::{ContextBuilder, Result, State};
 
-struct GameState {
+type Context = peacock::Context<()>;
+
+struct ColorPaletteExample {
     swatches: Vec<Image>,
 }
 
-impl GameState {
+impl ColorPaletteExample {
     fn new(ctx: &mut Context) -> Result<Self> {
         let all_colors = vec![
             // Pinks
@@ -170,7 +172,9 @@ impl GameState {
     }
 }
 
-impl State for GameState {
+impl State for ColorPaletteExample {
+    type Context = ();
+
     fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
@@ -204,6 +208,6 @@ impl State for GameState {
 
 fn main() -> Result<()> {
     ContextBuilder::new("Color Palette", 384, 384)
-        .build()?
-        .run_with_result(GameState::new)
+        .build_empty()?
+        .run_with_result(ColorPaletteExample::new)
 }

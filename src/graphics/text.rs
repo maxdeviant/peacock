@@ -13,7 +13,7 @@ pub struct Text {
 }
 
 impl Text {
-    pub fn new<S: Into<String>>(ctx: &mut Context, string: S, font: &Font) -> Result<Self> {
+    pub fn new<G, S: Into<String>>(ctx: &mut Context<G>, string: S, font: &Font) -> Result<Self> {
         let texture_creator = ctx.canvas.texture_creator();
 
         let string = string.into();
@@ -63,10 +63,10 @@ impl Default for DrawTextParams {
     }
 }
 
-impl Drawable for Text {
+impl<G> Drawable<G> for Text {
     type Params = DrawTextParams;
 
-    fn draw(&self, ctx: &mut Context, params: &DrawTextParams) -> Result<()> {
+    fn draw(&self, ctx: &mut Context<G>, params: &DrawTextParams) -> Result<()> {
         let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
 

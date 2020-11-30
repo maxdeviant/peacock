@@ -4,7 +4,7 @@ use crate::graphics::View;
 use crate::Context;
 
 /// Sets the title of the window.
-pub fn set_title(ctx: &mut Context, title: &str) {
+pub fn set_title<G>(ctx: &mut Context<G>, title: &str) {
     ctx.canvas
         .window_mut()
         .set_title(title)
@@ -12,7 +12,7 @@ pub fn set_title(ctx: &mut Context, title: &str) {
 }
 
 /// Sets a new view for the window.
-pub fn set_view(ctx: &mut Context, view: &View) {
+pub fn set_view<G>(ctx: &mut Context<G>, view: &View) {
     ctx.canvas.set_viewport(SdlRect::new(
         view.center.x as i32,
         view.center.y as i32,
@@ -25,6 +25,6 @@ pub fn set_view(ctx: &mut Context, view: &View) {
 }
 
 /// Sets whether the mouse cursor is visible in the window.
-pub fn set_mouse_cursor_visible(ctx: &mut Context, visible: bool) {
+pub fn set_mouse_cursor_visible<G>(ctx: &mut Context<G>, visible: bool) {
     ctx.sdl_context.mouse().show_cursor(visible);
 }

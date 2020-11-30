@@ -11,7 +11,7 @@ pub struct Image {
 }
 
 impl Image {
-    pub fn from_file(ctx: &mut Context, filename: &str) -> Result<Self> {
+    pub fn from_file<G>(ctx: &mut Context<G>, filename: &str) -> Result<Self> {
         let texture_creator = ctx.canvas.texture_creator();
         let texture = texture_creator
             .load_texture(filename)
@@ -29,7 +29,7 @@ impl Image {
         })
     }
 
-    pub fn from_color(ctx: &mut Context, size: Vector2u, color: Color) -> Result<Self> {
+    pub fn from_color<G>(ctx: &mut Context<G>, size: Vector2u, color: Color) -> Result<Self> {
         const ERROR_CONTEXT: &'static str = "Failed to create image from color";
 
         let texture_creator = ctx.canvas.texture_creator();
@@ -80,10 +80,10 @@ impl Default for DrawImageParams {
     }
 }
 
-impl Drawable for Image {
+impl<G> Drawable<G> for Image {
     type Params = DrawImageParams;
 
-    fn draw(&self, ctx: &mut Context, params: &DrawImageParams) -> Result<()> {
+    fn draw(&self, ctx: &mut Context<G>, params: &DrawImageParams) -> Result<()> {
         let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
 

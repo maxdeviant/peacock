@@ -15,6 +15,6 @@ pub fn f64_to_duration(duration: f64) -> Duration {
     Duration::new(seconds, nanos)
 }
 
-pub fn get_fps(ctx: &Context) -> f64 {
+pub fn get_fps<G>(ctx: &Context<G>) -> f64 {
     ctx.fps_tracker.fps()
 }

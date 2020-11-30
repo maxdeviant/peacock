@@ -5,7 +5,9 @@ use peacock::graphics::{self, DrawImageParams, Image, Rectangle};
 use peacock::input::{self, Key};
 use peacock::time;
 use peacock::window;
-use peacock::{Context, ContextBuilder, Result, State, Vector2f};
+use peacock::{ContextBuilder, Result, State, Vector2f};
+
+type Context = peacock::Context<()>;
 
 const WIDTH: u32 = 1920;
 const HEIGHT: u32 = 1080;
@@ -50,14 +52,14 @@ impl Orc {
     }
 }
 
-struct GameState {
+struct OrcMarkExample {
     rng: ThreadRng,
     sprite_sheet: Image,
     orcs: Vec<Orc>,
     spawn_timer: i32,
 }
 
-impl GameState {
+impl OrcMarkExample {
     fn new(ctx: &mut Context) -> Result<Self> {
         let mut rng = rand::thread_rng();
         let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
@@ -76,7 +78,9 @@ impl GameState {
     }
 }
 
-impl State for GameState {
+impl State for OrcMarkExample {
+    type Context = ();
+
     fn update(&mut self, ctx: &mut Context) -> Result<()> {
         if self.spawn_timer > 0 {
             self.spawn_timer -= 1;
@@ -164,6 +168,6 @@ impl State for GameState {
 
 fn main() -> Result<()> {
     ContextBuilder::new("OrcMark", WIDTH, HEIGHT)
-        .build()?
-        .run_with_result(GameState::new)
+        .build_empty()?
+        .run_with_result(OrcMarkExample::new)
 }

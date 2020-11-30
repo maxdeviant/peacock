@@ -14,26 +14,26 @@ use crate::Context;
 
 pub trait Component: Send + Sync + 'static {}
 
-pub fn create_entity(ctx: &mut Context) -> EntityBuilder {
+pub fn create_entity<G>(ctx: &mut Context<G>) -> EntityBuilder {
     EntityBuilder::new(&mut ctx.world)
 }
 
-pub fn entities(ctx: &Context) -> Vec<Entity> {
+pub fn entities<G>(ctx: &Context<G>) -> Vec<Entity> {
     ctx.world.entities.clone()
 }
 
-pub fn has_component<T: Component>(ctx: &mut Context, entity: Entity) -> bool {
+pub fn has_component<G, T: Component>(ctx: &mut Context<G>, entity: Entity) -> bool {
     ctx.world.has_component::<T>(entity)
 }
 
-pub fn get_component<T: Component>(ctx: &Context, entity: Entity) -> Option<&T> {
+pub fn get_component<G, T: Component>(ctx: &Context<G>, entity: Entity) -> Option<&T> {
     ctx.world.get_component(entity)
 }
 
-pub fn get_component_mut<T: Component>(ctx: &mut Context, entity: Entity) -> Option<&mut T> {
+pub fn get_component_mut<G, T: Component>(ctx: &mut Context<G>, entity: Entity) -> Option<&mut T> {
     ctx.world.get_component_mut(entity)
 }
 
-pub fn delete_entity(ctx: &mut Context, entity: Entity) {
+pub fn delete_entity<G>(ctx: &mut Context<G>, entity: Entity) {
     unimplemented!()
 }

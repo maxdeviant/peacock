@@ -30,6 +30,8 @@ pub(crate) use crate::fps_tracker::*;
 pub use crate::vector2::*;
 
 pub trait State {
-    fn update(&mut self, ctx: &mut Context) -> Result<()>;
-    fn draw(&mut self, ctx: &mut Context, dt: f64) -> Result<()>;
+    type Context;
+
+    fn update(&mut self, ctx: &mut Context<Self::Context>) -> Result<()>;
+    fn draw(&mut self, ctx: &mut Context<Self::Context>, dt: f64) -> Result<()>;
 }

@@ -54,10 +54,10 @@ pub struct DrawAnimationParams {
     pub scale: Option<Vector2f>,
 }
 
-impl Drawable for Animation {
+impl<G> Drawable<G> for Animation {
     type Params = DrawAnimationParams;
 
-    fn draw(&self, ctx: &mut Context, params: &DrawAnimationParams) -> Result<()> {
+    fn draw(&self, ctx: &mut Context<G>, params: &DrawAnimationParams) -> Result<()> {
         self.texture.draw(
             ctx,
             &DrawImageParams {

@@ -18,7 +18,7 @@ lazy_static! {
     pub(crate) static ref SDL_TTF_CONTEXT: Sdl2TtfContext = sdl2::ttf::init().unwrap();
 }
 
-pub struct Context {
+pub struct Context<G> {
     pub(crate) sdl_context: Sdl,
     pub(crate) canvas: Canvas<Window>,
     is_running: bool,
@@ -28,13 +28,14 @@ pub struct Context {
     pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
+    game: G,
 }
 
-impl Context {
+impl<G> Context<G> {
     /// Runs the context using the provided game state.
     pub fn run<S>(&mut self, state: &mut S) -> Result<()>
     where
-        S: State,
+        S: State<Context = G>,
     {
         let mut last_time = Instant::now();
         let mut lag = Duration::from_secs(0);
@@ -95,7 +96,7 @@ impl Context {
     /// Runs the context using the game state returned from the provided function.
     pub fn run_with<F, S>(&mut self, get_state: F) -> Result<()>
     where
-        S: State,
+        S: State<Context = G>,
         F: FnOnce(&mut Self) -> S,
     {
         let mut state = get_state(self);
@@ -105,7 +106,7 @@ impl Context {
     /// Runs the context using the game state returned from the provided (fallible) function.
     pub fn run_with_result<F, S>(&mut self, get_state: F) -> Result<()>
     where
-        S: State,
+        S: State<Context = G>,
         F: FnOnce(&mut Self) -> Result<S>,
     {
         let mut state = get_state(self)?;
@@ -158,7 +159,10 @@ impl<'a> ContextBuilder<'a> {
         self
     }
 
-    pub fn build(&self) -> Result<Context> {
+    pub fn build<G, F>(&self, build_game_ctx: F) -> Result<Context<G>>
+    where
+        F: FnOnce(&mut Context<()>) -> Result<G>,
+    {
         let sdl_context = sdl2::init()
             .map_err(Sdl2Error::ErrorMessage)
             .context("Failed to initialize SDL2 context")?;
@@ -178,7 +182,7 @@ impl<'a> ContextBuilder<'a> {
             .build()
             .context("Failed to build SDL2 canvas")?;
 
-        Ok(Context {
+        let mut ctx = Context {
             sdl_context,
             canvas,
             is_running: false,
@@ -188,7 +192,27 @@ impl<'a> ContextBuilder<'a> {
             graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),
+            game: (),
+        };
+
+        let game_ctx = build_game_ctx(&mut ctx)?;
+
+        Ok(Context {
+            sdl_context: ctx.sdl_context,
+            canvas: ctx.canvas,
+            is_running: ctx.is_running,
+            tick_rate: ctx.tick_rate,
+            fps_tracker: ctx.fps_tracker,
+            world: ctx.world,
+            graphics: ctx.graphics,
+            keyboard: ctx.keyboard,
+            mouse: ctx.mouse,
+            game: game_ctx,
         })
+    }
+
+    pub fn build_empty(&self) -> Result<Context<()>> {
+        self.build(|_| Ok(()))
     }
 }
 
