@@ -43,7 +43,7 @@ impl<G> Context<G> {
         //   (2) the game context is not modifiable externally unless
         //   (3) the caller obtains a mutable reference with `game_mut`, which
         //       is then checked by the borrow checker.
-        unsafe { std::mem::transmute(&self.game) }
+        unsafe { std::mem::transmute::<&'a G, &'b G>(&self.game) }
     }
 
     /// Returns a mutable reference to game context.
