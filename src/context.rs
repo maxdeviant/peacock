@@ -18,7 +18,12 @@ lazy_static! {
     pub(crate) static ref SDL_TTF_CONTEXT: Sdl2TtfContext = sdl2::ttf::init().unwrap();
 }
 
-pub struct Context<G> {
+pub struct ContextArgs<'ctx, G> {
+    pub ctx: &'ctx mut PeacockContext,
+    pub game: &'ctx mut G,
+}
+
+pub struct PeacockContext {
     pub(crate) sdl_context: Sdl,
     pub(crate) canvas: Canvas<Window>,
     is_running: bool,
@@ -28,29 +33,14 @@ pub struct Context<G> {
     pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
+}
+
+pub struct Context<G> {
+    pub(crate) ctx: PeacockContext,
     game: G,
 }
 
 impl<G> Context<G> {
-    /// Returns the game context.
-    pub fn game<'a, 'b>(&'a self) -> &'b G {
-        // Extend the lifetime of the game context so that we can borrow it at
-        // the same time as the rest of the context.
-        //
-        // This *should* be safe because:
-        //   (1) The game context is opaque within Peacock, so nothing in the
-        //       engine will be modifying it,
-        //   (2) the game context is not modifiable externally unless
-        //   (3) the caller obtains a mutable reference with `game_mut`, which
-        //       is then checked by the borrow checker.
-        unsafe { std::mem::transmute::<&'a G, &'b G>(&self.game) }
-    }
-
-    /// Returns a mutable reference to game context.
-    pub fn game_mut(&mut self) -> &mut G {
-        &mut self.game
-    }
-
     /// Runs the context using the provided game state.
     pub fn run<S>(&mut self, state: &mut S) -> Result<()>
     where
@@ -59,52 +49,63 @@ impl<G> Context<G> {
         let mut last_time = Instant::now();
         let mut lag = Duration::from_secs(0);
 
-        self.is_running = true;
+        self.ctx.is_running = true;
 
         let mut event_pump = self
+            .ctx
             .sdl_context
             .event_pump()
             .map_err(Sdl2Error::ErrorMessage)
             .context("Failed to obtain the SDL2 event pump")?;
 
-        while self.is_running {
+        while self.ctx.is_running {
             let current_time = Instant::now();
             let elapsed_time = current_time - last_time;
             last_time = current_time;
             lag += elapsed_time;
 
-            self.fps_tracker.tick(elapsed_time);
+            self.ctx.fps_tracker.tick(elapsed_time);
 
             for event in event_pump.poll_iter() {
                 if let Err(err) = self
                     .handle_event(event)
-                    .and_then(|event| input::handle_event(self, event))
+                    .and_then(|event| input::handle_event(&mut self.ctx, event))
                 {
-                    self.is_running = false;
+                    self.ctx.is_running = false;
                     return Err(err);
                 }
             }
 
-            while lag >= self.tick_rate {
-                if let Err(err) = state.update(self) {
-                    self.is_running = false;
+            while lag >= self.ctx.tick_rate {
+                let ctx = ContextArgs {
+                    ctx: &mut self.ctx,
+                    game: &mut self.game,
+                };
+
+                if let Err(err) = state.update(ctx) {
+                    self.ctx.is_running = false;
                     return Err(err);
                 }
 
-                input::cleanup_after_state_update(self);
-                lag -= self.tick_rate;
+                input::cleanup_after_state_update(&mut self.ctx);
+                lag -= self.ctx.tick_rate;
             }
 
-            let dt = time::duration_to_f64(lag) / time::duration_to_f64(self.tick_rate);
+            let dt = time::duration_to_f64(lag) / time::duration_to_f64(self.ctx.tick_rate);
 
-            graphics::clear(self, Color::CADET_BLUE);
+            graphics::clear(&mut self.ctx, Color::CADET_BLUE);
 
-            if let Err(err) = state.draw(self, dt) {
-                self.is_running = false;
+            let ctx = ContextArgs {
+                ctx: &mut self.ctx,
+                game: &mut self.game,
+            };
+
+            if let Err(err) = state.draw(ctx, dt) {
+                self.ctx.is_running = false;
                 return Err(err);
             }
 
-            self.canvas.present();
+            self.ctx.canvas.present();
 
             std::thread::yield_now();
         }
@@ -116,9 +117,14 @@ impl<G> Context<G> {
     pub fn run_with<F, S>(&mut self, get_state: F) -> Result<()>
     where
         S: State<Context = G>,
-        F: FnOnce(&mut Self) -> S,
+        F: FnOnce(ContextArgs<G>) -> S,
     {
-        let mut state = get_state(self);
+        let ctx = ContextArgs {
+            ctx: &mut self.ctx,
+            game: &mut self.game,
+        };
+
+        let mut state = get_state(ctx);
         self.run(&mut state)
     }
 
@@ -126,15 +132,20 @@ impl<G> Context<G> {
     pub fn run_with_result<F, S>(&mut self, get_state: F) -> Result<()>
     where
         S: State<Context = G>,
-        F: FnOnce(&mut Self) -> Result<S>,
+        F: FnOnce(ContextArgs<G>) -> Result<S>,
     {
-        let mut state = get_state(self)?;
+        let ctx = ContextArgs {
+            ctx: &mut self.ctx,
+            game: &mut self.game,
+        };
+
+        let mut state = get_state(ctx)?;
         self.run(&mut state)
     }
 
     fn handle_event(&mut self, event: Event) -> Result<Event> {
         match event {
-            Event::Quit { .. } => self.is_running = false,
+            Event::Quit { .. } => self.ctx.is_running = false,
             _ => {}
         }
 
@@ -180,7 +191,7 @@ impl<'a> ContextBuilder<'a> {
 
     pub fn build<G, F>(&self, build_game_ctx: F) -> Result<Context<G>>
     where
-        F: FnOnce(&mut Context<()>) -> Result<G>,
+        F: FnOnce(&mut PeacockContext) -> Result<G>,
     {
         let sdl_context = sdl2::init()
             .map_err(Sdl2Error::ErrorMessage)
@@ -201,7 +212,7 @@ impl<'a> ContextBuilder<'a> {
             .build()
             .context("Failed to build SDL2 canvas")?;
 
-        let mut ctx = Context {
+        let mut ctx = PeacockContext {
             sdl_context,
             canvas,
             is_running: false,
@@ -211,21 +222,12 @@ impl<'a> ContextBuilder<'a> {
             graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),
-            game: (),
         };
 
         let game_ctx = build_game_ctx(&mut ctx)?;
 
         Ok(Context {
-            sdl_context: ctx.sdl_context,
-            canvas: ctx.canvas,
-            is_running: ctx.is_running,
-            tick_rate: ctx.tick_rate,
-            fps_tracker: ctx.fps_tracker,
-            world: ctx.world,
-            graphics: ctx.graphics,
-            keyboard: ctx.keyboard,
-            mouse: ctx.mouse,
+            ctx,
             game: game_ctx,
         })
     }

@@ -2,7 +2,7 @@ use peacock::graphics::{self, DrawTextParams, Font, Text};
 use peacock::Result;
 use peacock::{ContextBuilder, State, Vector2f};
 
-type Context = peacock::Context<()>;
+type Context<'ctx> = peacock::ContextArgs<'ctx, ()>;
 
 struct TextExample {
     greeting_message: Text,
@@ -10,16 +10,16 @@ struct TextExample {
 }
 
 impl TextExample {
-    fn new(ctx: &mut Context) -> Result<Self> {
-        let font = Font::from_file(ctx, "examples/res/Roboto-Regular.ttf", 24)?;
+    fn new(ctx: Context) -> Result<Self> {
+        let font = Font::from_file(ctx.ctx, "examples/res/Roboto-Regular.ttf", 24)?;
 
         let greeting_message = Text::new(
-            ctx,
+            ctx.ctx,
             "Hello, world!\n\nI hope you enjoy using Peacock!",
             &font,
         )?;
 
-        let centered_text = Text::new(ctx, "This text is centered on the screen", &font)?;
+        let centered_text = Text::new(ctx.ctx, "This text is centered on the screen", &font)?;
 
         Ok(Self {
             greeting_message,
@@ -31,11 +31,11 @@ impl TextExample {
 impl State for TextExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, _ctx: Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
         graphics::draw(
             ctx,
             &self.greeting_message,

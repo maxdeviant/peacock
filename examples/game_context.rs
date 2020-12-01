@@ -1,14 +1,14 @@
 use peacock::graphics::{self, DrawTextParams, Font, Text};
-use peacock::{ContextBuilder, Result, State, Vector2f};
+use peacock::{ContextBuilder, PeacockContext, Result, State, Vector2f};
 
-type Context = peacock::Context<GameContext>;
+type Context<'ctx> = peacock::ContextArgs<'ctx, GameContext>;
 
 struct GameContext {
     font: Font,
 }
 
 impl GameContext {
-    fn new(ctx: &mut peacock::Context<()>) -> Result<Self> {
+    fn new(ctx: &mut PeacockContext) -> Result<Self> {
         Ok(Self {
             font: Font::from_file(ctx, "examples/res/Roboto-Regular.ttf", 24)?,
         })
@@ -20,9 +20,9 @@ struct GameContextExample {
 }
 
 impl GameContextExample {
-    fn new(ctx: &mut Context) -> Result<Self> {
+    fn new(ctx: Context) -> Result<Self> {
         Ok(Self {
-            message: Text::new(ctx, "Hello", &ctx.game().font)?,
+            message: Text::new(ctx.ctx, "Hello", &ctx.game.font)?,
         })
     }
 }
@@ -30,11 +30,11 @@ impl GameContextExample {
 impl State for GameContextExample {
     type Context = GameContext;
 
-    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, _ctx: Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
         graphics::draw(
             ctx,
             &self.message,

@@ -4,7 +4,7 @@ use hashbrown::HashSet;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode as SdlKeycode;
 
-use crate::{Context, Result, Vector2f};
+use crate::{PeacockContext, Result, Vector2f};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Key {
@@ -258,7 +258,7 @@ impl MouseContext {
     }
 }
 
-pub(crate) fn handle_event<G>(ctx: &mut Context<G>, event: Event) -> Result<()> {
+pub(crate) fn handle_event(ctx: &mut PeacockContext, event: Event) -> Result<()> {
     match event {
         Event::KeyDown { keycode, .. } => {
             if let Some(keycode) = keycode {
@@ -279,24 +279,24 @@ pub(crate) fn handle_event<G>(ctx: &mut Context<G>, event: Event) -> Result<()> 
     Ok(())
 }
 
-pub(crate) fn cleanup_after_state_update<G>(ctx: &mut Context<G>) {
+pub(crate) fn cleanup_after_state_update(ctx: &mut PeacockContext) {
     ctx.keyboard.last_pressed_keys = ctx.keyboard.pressed_keys.clone();
 }
 
 /// Returns whether the specified [`Key`] is down.
-pub fn is_key_down<G>(ctx: &Context<G>, key: Key) -> bool {
+pub fn is_key_down(ctx: &PeacockContext, key: Key) -> bool {
     ctx.keyboard.pressed_keys.contains(&key)
 }
 
 /// Returns whether the specified [`Key`] is up.
-pub fn is_key_up<G>(ctx: &Context<G>, key: Key) -> bool {
+pub fn is_key_up(ctx: &PeacockContext, key: Key) -> bool {
     !ctx.keyboard.pressed_keys.contains(&key)
 }
 
-pub fn was_key_pressed<G>(ctx: &Context<G>, key: Key) -> bool {
+pub fn was_key_pressed(ctx: &PeacockContext, key: Key) -> bool {
     !ctx.keyboard.last_pressed_keys.contains(&key) && is_key_down(ctx, key)
 }
 
-pub fn was_key_released<G>(ctx: &Context<G>, key: Key) -> bool {
+pub fn was_key_released(ctx: &PeacockContext, key: Key) -> bool {
     ctx.keyboard.last_pressed_keys.contains(&key) && is_key_up(ctx, key)
 }

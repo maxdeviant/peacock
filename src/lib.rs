@@ -32,6 +32,6 @@ pub use crate::vector2::*;
 pub trait State {
     type Context;
 
-    fn update(&mut self, ctx: &mut Context<Self::Context>) -> Result<()>;
-    fn draw(&mut self, ctx: &mut Context<Self::Context>, dt: f64) -> Result<()>;
+    fn update(&mut self, ctx: ContextArgs<Self::Context>) -> Result<()>;
+    fn draw(&mut self, ctx: ContextArgs<Self::Context>, dt: f64) -> Result<()>;
 }

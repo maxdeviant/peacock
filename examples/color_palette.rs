@@ -1,14 +1,14 @@
 use peacock::graphics::{self, Color, DrawImageParams, Image};
 use peacock::{ContextBuilder, Result, State};
 
-type Context = peacock::Context<()>;
+type Context<'ctx> = peacock::ContextArgs<'ctx, ()>;
 
 struct ColorPaletteExample {
     swatches: Vec<Image>,
 }
 
 impl ColorPaletteExample {
-    fn new(ctx: &mut Context) -> Result<Self> {
+    fn new(ctx: Context) -> Result<Self> {
         let all_colors = vec![
             // Pinks
             Color::PINK,
@@ -165,7 +165,7 @@ impl ColorPaletteExample {
 
         let mut swatches = Vec::with_capacity(all_colors.len());
         for color in all_colors {
-            swatches.push(Image::from_color(ctx, (32, 32).into(), color)?);
+            swatches.push(Image::from_color(ctx.ctx, (32, 32).into(), color)?);
         }
 
         Ok(Self { swatches })
@@ -175,12 +175,12 @@ impl ColorPaletteExample {
 impl State for ColorPaletteExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, _ctx: Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
-        graphics::clear(ctx, Color::BLACK);
+    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+        graphics::clear(ctx.ctx, Color::BLACK);
 
         let (width, height) = (12, 12);
 

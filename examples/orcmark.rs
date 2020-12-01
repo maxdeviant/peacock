@@ -7,7 +7,7 @@ use peacock::time;
 use peacock::window;
 use peacock::{ContextBuilder, Result, State, Vector2f};
 
-type Context = peacock::Context<()>;
+type Context<'ctx> = peacock::ContextArgs<'ctx, ()>;
 
 const WIDTH: u32 = 1920;
 const HEIGHT: u32 = 1080;

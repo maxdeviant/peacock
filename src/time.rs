@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use crate::Context;
+use crate::PeacockContext;
 
 pub fn duration_to_f64(duration: Duration) -> f64 {
     let seconds = duration.as_secs() as f64;
@@ -15,6 +15,6 @@ pub fn f64_to_duration(duration: f64) -> Duration {
     Duration::new(seconds, nanos)
 }
 
-pub fn get_fps<G>(ctx: &Context<G>) -> f64 {
+pub fn get_fps(ctx: &PeacockContext) -> f64 {
     ctx.fps_tracker.fps()
 }

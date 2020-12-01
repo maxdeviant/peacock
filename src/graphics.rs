@@ -16,23 +16,23 @@ pub use self::rectangle::*;
 pub use self::text::*;
 pub use self::view::*;
 
-use crate::{Context, Result};
+use crate::{ContextArgs, PeacockContext, Result};
 
 pub trait Drawable<G> {
     type Params;
 
-    fn draw(&self, ctx: &mut Context<G>, params: &Self::Params) -> Result<()>;
+    fn draw(&self, ctx: ContextArgs<G>, params: &Self::Params) -> Result<()>;
 }
 
 /// Clears the screen using the given [`Color`].
-pub fn clear<G>(ctx: &mut Context<G>, color: Color) {
+pub fn clear(ctx: &mut PeacockContext, color: Color) {
     ctx.canvas.set_draw_color(color);
     ctx.canvas.clear();
 }
 
 /// Draws a [`Drawable`] object to the current render target.
 pub fn draw<G, D: Drawable<G>>(
-    ctx: &mut Context<G>,
+    ctx: ContextArgs<G>,
     drawable: &D,
     params: &D::Params,
 ) -> Result<()> {

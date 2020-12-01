@@ -3,7 +3,7 @@ use sdl2::rect::Rect as SdlRect;
 use crate::error::{AnyhowContext, Sdl2Error};
 use crate::graphics::{AssetRef, Color, Drawable, Font};
 use crate::vector2::Vector2f;
-use crate::{Context, Result, Vector2u};
+use crate::{ContextArgs, PeacockContext, Result, Vector2u};
 
 #[derive(Debug)]
 pub struct Text {
@@ -13,7 +13,7 @@ pub struct Text {
 }
 
 impl Text {
-    pub fn new<G, S: Into<String>>(ctx: &mut Context<G>, string: S, font: &Font) -> Result<Self> {
+    pub fn new<S: Into<String>>(ctx: &mut PeacockContext, string: S, font: &Font) -> Result<Self> {
         let texture_creator = ctx.canvas.texture_creator();
 
         let string = string.into();
@@ -66,7 +66,7 @@ impl Default for DrawTextParams {
 impl<G> Drawable<G> for Text {
     type Params = DrawTextParams;
 
-    fn draw(&self, ctx: &mut Context<G>, params: &DrawTextParams) -> Result<()> {
+    fn draw(&self, ContextArgs { ctx, .. }: ContextArgs<G>, params: &DrawTextParams) -> Result<()> {
         let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
 

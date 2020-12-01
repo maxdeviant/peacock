@@ -3,7 +3,7 @@ use std::fmt;
 use sdl2::ttf::{Font as SdlFont, FontError as SdlFontError};
 
 use crate::error::{AnyhowContext, Sdl2Error};
-use crate::{Context, Result, SDL_TTF_CONTEXT};
+use crate::{PeacockContext, Result, SDL_TTF_CONTEXT};
 
 /// A font.
 pub struct Font {
@@ -18,7 +18,7 @@ impl fmt::Debug for Font {
 
 impl Font {
     /// Creates a new [`Font`] from a file.
-    pub fn from_file<G>(ctx: &mut Context<G>, filename: &str, size: u16) -> Result<Self> {
+    pub fn from_file(ctx: &mut PeacockContext, filename: &str, size: u16) -> Result<Self> {
         let _ = ctx;
         let font = SDL_TTF_CONTEXT
             .load_font(filename, size)

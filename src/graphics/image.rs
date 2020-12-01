@@ -3,7 +3,7 @@ use sdl2::rect::Rect as SdlRect;
 
 use crate::error::{AnyhowContext, Sdl2Error};
 use crate::graphics::{AssetRef, Color, Drawable, Rectangle};
-use crate::{Context, Result, Vector2f, Vector2u};
+use crate::{ContextArgs, PeacockContext, Result, Vector2f, Vector2u};
 
 #[derive(Debug)]
 pub struct Image {
@@ -11,7 +11,7 @@ pub struct Image {
 }
 
 impl Image {
-    pub fn from_file<G>(ctx: &mut Context<G>, filename: &str) -> Result<Self> {
+    pub fn from_file(ctx: &mut PeacockContext, filename: &str) -> Result<Self> {
         let texture_creator = ctx.canvas.texture_creator();
         let texture = texture_creator
             .load_texture(filename)
@@ -29,7 +29,7 @@ impl Image {
         })
     }
 
-    pub fn from_color<G>(ctx: &mut Context<G>, size: Vector2u, color: Color) -> Result<Self> {
+    pub fn from_color(ctx: &mut PeacockContext, size: Vector2u, color: Color) -> Result<Self> {
         const ERROR_CONTEXT: &'static str = "Failed to create image from color";
 
         let texture_creator = ctx.canvas.texture_creator();
@@ -83,7 +83,11 @@ impl Default for DrawImageParams {
 impl<G> Drawable<G> for Image {
     type Params = DrawImageParams;
 
-    fn draw(&self, ctx: &mut Context<G>, params: &DrawImageParams) -> Result<()> {
+    fn draw(
+        &self,
+        ContextArgs { ctx, .. }: ContextArgs<G>,
+        params: &DrawImageParams,
+    ) -> Result<()> {
         let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
 

@@ -1,6 +1,6 @@
-use crate::{Context, Vector2f};
+use crate::{PeacockContext, Vector2f};
 
 /// Returns the position of the mouse.
-pub fn position<G>(ctx: &Context<G>) -> Vector2f {
+pub fn position(ctx: &PeacockContext) -> Vector2f {
     ctx.mouse.position
 }

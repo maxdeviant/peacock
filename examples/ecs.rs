@@ -4,7 +4,7 @@ use peacock::input::{self, Key};
 use peacock::Result;
 use peacock::{ContextBuilder, State, Vector2f};
 
-type Context = peacock::Context<()>;
+type Context<'ctx> = peacock::ContextArgs<'ctx, ()>;
 
 #[derive(Debug)]
 struct Transform {
@@ -26,10 +26,10 @@ struct EcsExample {
 }
 
 impl EcsExample {
-    fn new(ctx: &mut Context) -> Result<Self> {
-        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
+    fn new(ctx: Context) -> Result<Self> {
+        let sprite_sheet = Image::from_file(ctx.ctx, "examples/res/0x72_dungeon_ii.png")?;
 
-        let player = ecs::create_entity(ctx)
+        let player = ecs::create_entity(ctx.ctx)
             .with(Transform {
                 position: Vector2f::new(0.0, 0.0),
             })
@@ -47,23 +47,23 @@ impl EcsExample {
 
 impl State for EcsExample {
     type Context = ();
-    fn update(&mut self, ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, ctx: Context) -> Result<()> {
         let direction = {
             let mut direction = Vector2f::ZERO;
 
-            if input::is_key_down(ctx, Key::A) {
+            if input::is_key_down(ctx.ctx, Key::A) {
                 direction += -Vector2f::UNIT_X
             }
 
-            if input::is_key_down(ctx, Key::D) {
+            if input::is_key_down(ctx.ctx, Key::D) {
                 direction += Vector2f::UNIT_X;
             }
 
-            if input::is_key_down(ctx, Key::W) {
+            if input::is_key_down(ctx.ctx, Key::W) {
                 direction += -Vector2f::UNIT_Y;
             }
 
-            if input::is_key_down(ctx, Key::S) {
+            if input::is_key_down(ctx.ctx, Key::S) {
                 direction += Vector2f::UNIT_Y;
             }
 
@@ -74,7 +74,7 @@ impl State for EcsExample {
             }
         };
 
-        if let Some(transform) = ecs::get_component_mut::<_, Transform>(ctx, self.player) {
+        if let Some(transform) = ecs::get_component_mut::<Transform>(ctx.ctx, self.player) {
             let speed = 10.0;
 
             transform.position += direction * speed;
@@ -83,10 +83,10 @@ impl State for EcsExample {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
-        for entity in ecs::entities(ctx) {
-            let transform = ecs::get_component::<_, Transform>(ctx, entity);
-            let static_sprite = ecs::get_component::<_, StaticSprite>(ctx, entity);
+    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+        for entity in ecs::entities(ctx.ctx) {
+            let transform = ecs::get_component::<Transform>(ctx.ctx, entity);
+            let static_sprite = ecs::get_component::<StaticSprite>(ctx.ctx, entity);
 
             match (transform, static_sprite) {
                 (Some(transform), Some(static_sprite)) => {

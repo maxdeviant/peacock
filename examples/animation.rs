@@ -2,15 +2,15 @@ use peacock::graphics::{self, Animation, DrawAnimationParams, Image, Rectangle, 
 use peacock::window;
 use peacock::{ContextBuilder, Result, State};
 
-type Context = peacock::Context<()>;
+type Context<'ctx> = peacock::ContextArgs<'ctx, ()>;
 
 struct AnimationExample {
     animation: Animation,
 }
 
 impl AnimationExample {
-    fn new(ctx: &mut Context) -> Result<Self> {
-        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
+    fn new(ctx: Context) -> Result<Self> {
+        let sprite_sheet = Image::from_file(ctx.ctx, "examples/res/0x72_dungeon_ii.png")?;
 
         let animation = Animation::new(
             sprite_sheet,
@@ -27,20 +27,20 @@ impl AnimationExample {
     }
 }
 
-impl State for AnimationExample {
+impl<'ctx> State for AnimationExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
+    fn update(&mut self, _ctx: Context) -> Result<()> {
         self.animation.tick();
 
         Ok(())
     }
 
-    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
         let mut view = View::new((0.0, 0.0).into(), (1920.0, 1080.0).into());
         view.set_zoom(8.0);
 
-        window::set_view(ctx, &view);
+        window::set_view(ctx.ctx, &view);
 
         graphics::draw(
             ctx,
