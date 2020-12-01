@@ -22,6 +22,7 @@ pub mod window;
 
 mod context;
 mod fps_tracker;
+mod game;
 mod vector2;
 
 pub use crate::context::*;

@@ -1,6 +1,3 @@
-use std::ops::Deref;
-use std::ptr::NonNull;
-use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use lazy_static::*;
@@ -12,6 +9,7 @@ use sdl2::Sdl;
 
 use crate::ecs::World;
 use crate::error::{AnyhowContext, Result, Sdl2Error};
+use crate::game::{GameContext, LendedGame};
 use crate::graphics::{self, Color, GraphicsContext};
 use crate::input::{self, KeyboardContext, MouseContext};
 use crate::time;
@@ -19,25 +17,6 @@ use crate::{FpsTracker, State};
 
 lazy_static! {
     pub(crate) static ref SDL_TTF_CONTEXT: Sdl2TtfContext = sdl2::ttf::init().unwrap();
-}
-
-struct ContextAllocation<G> {
-    data: Vec<u8>,
-    game: G,
-}
-
-#[derive(Clone)]
-pub struct LendedGame<G> {
-    ptr: NonNull<G>,
-    token: Arc<()>,
-}
-
-impl<G> Deref for LendedGame<G> {
-    type Target = G;
-
-    fn deref(&self) -> &Self::Target {
-        unsafe { &*self.ptr.as_ptr() }
-    }
 }
 
 pub struct Context<G> {
@@ -50,22 +29,18 @@ pub struct Context<G> {
     pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
-    allocation: Box<ContextAllocation<G>>,
-    lended_games: Arc<()>,
+    pub(crate) game: GameContext<G>,
 }
 
 impl<G> Context<G> {
     /// Returns the game context.
     pub fn game(&self) -> LendedGame<G> {
-        LendedGame {
-            ptr: NonNull::from(&self.allocation.game),
-            token: self.lended_games.clone(),
-        }
+        self.game.game()
     }
 
     /// Returns a mutable reference to game context.
     pub fn game_mut(&mut self) -> &mut G {
-        &mut self.allocation.game
+        self.game.game_mut()
     }
 
     /// Runs the context using the provided game state.
@@ -159,9 +134,7 @@ impl<G> Context<G> {
     }
 
     fn shutdown(&mut self) -> Result<()> {
-        assert!(Arc::strong_count(&self.lended_games) == 1);
-
-        Ok(())
+        self.game.collect()
     }
 }
 
@@ -234,11 +207,7 @@ impl<'a> ContextBuilder<'a> {
             graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),
-            allocation: Box::new(ContextAllocation {
-                data: Vec::new(),
-                game: (),
-            }),
-            lended_games: Arc::new(()),
+            game: GameContext::new(()),
         };
 
         let game_ctx = build_game_ctx(&mut ctx)?;
@@ -253,11 +222,7 @@ impl<'a> ContextBuilder<'a> {
             graphics: ctx.graphics,
             keyboard: ctx.keyboard,
             mouse: ctx.mouse,
-            allocation: Box::new(ContextAllocation {
-                data: Vec::new(),
-                game: game_ctx,
-            }),
-            lended_games: Arc::new(()),
+            game: GameContext::new(game_ctx),
         })
     }
 
