@@ -85,7 +85,7 @@ impl<G> Drawable<G> for Image {
 
     fn draw(
         &self,
-        ContextArgs { ctx, .. }: ContextArgs<G>,
+        ContextArgs { ctx, .. }: &mut ContextArgs<G>,
         params: &DrawImageParams,
     ) -> Result<()> {
         let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();

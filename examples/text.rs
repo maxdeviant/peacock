@@ -10,7 +10,7 @@ struct TextExample {
 }
 
 impl TextExample {
-    fn new(ctx: Context) -> Result<Self> {
+    fn new(ctx: &mut Context) -> Result<Self> {
         let font = Font::from_file(ctx.ctx, "examples/res/Roboto-Regular.ttf", 24)?;
 
         let greeting_message = Text::new(
@@ -31,11 +31,11 @@ impl TextExample {
 impl State for TextExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: Context) -> Result<()> {
+    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         graphics::draw(
             ctx,
             &self.greeting_message,

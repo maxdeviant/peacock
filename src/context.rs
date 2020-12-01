@@ -77,12 +77,12 @@ impl<G> Context<G> {
             }
 
             while lag >= self.ctx.tick_rate {
-                let ctx = ContextArgs {
+                let mut ctx = ContextArgs {
                     ctx: &mut self.ctx,
                     game: &mut self.game,
                 };
 
-                if let Err(err) = state.update(ctx) {
+                if let Err(err) = state.update(&mut ctx) {
                     self.ctx.is_running = false;
                     return Err(err);
                 }
@@ -95,12 +95,12 @@ impl<G> Context<G> {
 
             graphics::clear(&mut self.ctx, Color::CADET_BLUE);
 
-            let ctx = ContextArgs {
+            let mut ctx = ContextArgs {
                 ctx: &mut self.ctx,
                 game: &mut self.game,
             };
 
-            if let Err(err) = state.draw(ctx, dt) {
+            if let Err(err) = state.draw(&mut ctx, dt) {
                 self.ctx.is_running = false;
                 return Err(err);
             }
@@ -117,14 +117,14 @@ impl<G> Context<G> {
     pub fn run_with<F, S>(&mut self, get_state: F) -> Result<()>
     where
         S: State<Context = G>,
-        F: FnOnce(ContextArgs<G>) -> S,
+        F: FnOnce(&mut ContextArgs<G>) -> S,
     {
-        let ctx = ContextArgs {
+        let mut ctx = ContextArgs {
             ctx: &mut self.ctx,
             game: &mut self.game,
         };
 
-        let mut state = get_state(ctx);
+        let mut state = get_state(&mut ctx);
         self.run(&mut state)
     }
 
@@ -132,14 +132,14 @@ impl<G> Context<G> {
     pub fn run_with_result<F, S>(&mut self, get_state: F) -> Result<()>
     where
         S: State<Context = G>,
-        F: FnOnce(ContextArgs<G>) -> Result<S>,
+        F: FnOnce(&mut ContextArgs<G>) -> Result<S>,
     {
-        let ctx = ContextArgs {
+        let mut ctx = ContextArgs {
             ctx: &mut self.ctx,
             game: &mut self.game,
         };
 
-        let mut state = get_state(ctx)?;
+        let mut state = get_state(&mut ctx)?;
         self.run(&mut state)
     }
 

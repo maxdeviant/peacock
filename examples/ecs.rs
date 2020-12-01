@@ -26,7 +26,7 @@ struct EcsExample {
 }
 
 impl EcsExample {
-    fn new(ctx: Context) -> Result<Self> {
+    fn new(ctx: &mut Context) -> Result<Self> {
         let sprite_sheet = Image::from_file(ctx.ctx, "examples/res/0x72_dungeon_ii.png")?;
 
         let player = ecs::create_entity(ctx.ctx)
@@ -47,7 +47,7 @@ impl EcsExample {
 
 impl State for EcsExample {
     type Context = ();
-    fn update(&mut self, ctx: Context) -> Result<()> {
+    fn update(&mut self, ctx: &mut Context) -> Result<()> {
         let direction = {
             let mut direction = Vector2f::ZERO;
 
@@ -83,7 +83,7 @@ impl State for EcsExample {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         for entity in ecs::entities(ctx.ctx) {
             let transform = ecs::get_component::<Transform>(ctx.ctx, entity);
             let static_sprite = ecs::get_component::<StaticSprite>(ctx.ctx, entity);

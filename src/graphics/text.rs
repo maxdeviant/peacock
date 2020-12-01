@@ -66,7 +66,7 @@ impl Default for DrawTextParams {
 impl<G> Drawable<G> for Text {
     type Params = DrawTextParams;
 
-    fn draw(&self, ContextArgs { ctx, .. }: ContextArgs<G>, params: &DrawTextParams) -> Result<()> {
+    fn draw(&self, ContextArgs { ctx, .. }: &mut ContextArgs<G>, params: &DrawTextParams) -> Result<()> {
         let texture = ctx.graphics.textures.get_mut(&self.texture).unwrap();
         let texture_query = texture.query();
 

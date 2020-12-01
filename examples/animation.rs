@@ -9,7 +9,7 @@ struct AnimationExample {
 }
 
 impl AnimationExample {
-    fn new(ctx: Context) -> Result<Self> {
+    fn new(ctx: &mut Context) -> Result<Self> {
         let sprite_sheet = Image::from_file(ctx.ctx, "examples/res/0x72_dungeon_ii.png")?;
 
         let animation = Animation::new(
@@ -30,13 +30,13 @@ impl AnimationExample {
 impl<'ctx> State for AnimationExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: Context) -> Result<()> {
+    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         self.animation.tick();
 
         Ok(())
     }
 
-    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         let mut view = View::new((0.0, 0.0).into(), (1920.0, 1080.0).into());
         view.set_zoom(8.0);
 

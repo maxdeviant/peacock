@@ -8,7 +8,7 @@ struct ColorPaletteExample {
 }
 
 impl ColorPaletteExample {
-    fn new(ctx: Context) -> Result<Self> {
+    fn new(ctx: &mut Context) -> Result<Self> {
         let all_colors = vec![
             // Pinks
             Color::PINK,
@@ -175,11 +175,11 @@ impl ColorPaletteExample {
 impl State for ColorPaletteExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: Context) -> Result<()> {
+    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         graphics::clear(ctx.ctx, Color::BLACK);
 
         let (width, height) = (12, 12);

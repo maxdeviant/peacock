@@ -8,11 +8,11 @@ struct HelloWorldExample;
 impl State for HelloWorldExample {
     type Context = ();
 
-    fn update(&mut self, _ctx: Context) -> Result<()> {
+    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, _ctx: Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, _ctx: &mut Context, _dt: f64) -> Result<()> {
         Ok(())
     }
 }

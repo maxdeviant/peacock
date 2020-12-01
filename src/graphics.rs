@@ -21,7 +21,7 @@ use crate::{ContextArgs, PeacockContext, Result};
 pub trait Drawable<G> {
     type Params;
 
-    fn draw(&self, ctx: ContextArgs<G>, params: &Self::Params) -> Result<()>;
+    fn draw(&self, ctx: &mut ContextArgs<G>, params: &Self::Params) -> Result<()>;
 }
 
 /// Clears the screen using the given [`Color`].
@@ -32,7 +32,7 @@ pub fn clear(ctx: &mut PeacockContext, color: Color) {
 
 /// Draws a [`Drawable`] object to the current render target.
 pub fn draw<G, D: Drawable<G>>(
-    ctx: ContextArgs<G>,
+    ctx: &mut ContextArgs<G>,
     drawable: &D,
     params: &D::Params,
 ) -> Result<()> {

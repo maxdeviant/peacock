@@ -62,7 +62,7 @@ struct OrcMarkExample {
 impl OrcMarkExample {
     fn new(ctx: &mut Context) -> Result<Self> {
         let mut rng = rand::thread_rng();
-        let sprite_sheet = Image::from_file(ctx, "examples/res/0x72_dungeon_ii.png")?;
+        let sprite_sheet = Image::from_file(ctx.ctx, "examples/res/0x72_dungeon_ii.png")?;
         let mut orcs = Vec::with_capacity(INITIAL_ORCS);
 
         for _ in 0..INITIAL_ORCS {
@@ -86,7 +86,7 @@ impl State for OrcMarkExample {
             self.spawn_timer -= 1;
         }
 
-        if input::is_key_down(ctx, Key::Space) && self.spawn_timer == 0 {
+        if input::is_key_down(ctx.ctx, Key::Space) && self.spawn_timer == 0 {
             for _ in 0..INITIAL_ORCS {
                 self.orcs.push(Orc::new(&mut self.rng));
             }
@@ -154,11 +154,11 @@ impl State for OrcMarkExample {
         }
 
         window::set_title(
-            ctx,
+            ctx.ctx,
             &format!(
                 "OrcMark - {} orcs - {:.0} FPS",
                 self.orcs.len(),
-                time::get_fps(ctx)
+                time::get_fps(ctx.ctx)
             ),
         );
 

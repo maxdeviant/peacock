@@ -20,7 +20,7 @@ struct GameContextExample {
 }
 
 impl GameContextExample {
-    fn new(ctx: Context) -> Result<Self> {
+    fn new(ctx: &mut Context) -> Result<Self> {
         Ok(Self {
             message: Text::new(ctx.ctx, "Hello", &ctx.game.font)?,
         })
@@ -30,11 +30,11 @@ impl GameContextExample {
 impl State for GameContextExample {
     type Context = GameContext;
 
-    fn update(&mut self, _ctx: Context) -> Result<()> {
+    fn update(&mut self, _ctx: &mut Context) -> Result<()> {
         Ok(())
     }
 
-    fn draw(&mut self, ctx: Context, _dt: f64) -> Result<()> {
+    fn draw(&mut self, ctx: &mut Context, _dt: f64) -> Result<()> {
         graphics::draw(
             ctx,
             &self.message,

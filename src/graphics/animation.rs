@@ -57,7 +57,7 @@ pub struct DrawAnimationParams {
 impl<G> Drawable<G> for Animation {
     type Params = DrawAnimationParams;
 
-    fn draw(&self, ctx: ContextArgs<G>, params: &DrawAnimationParams) -> Result<()> {
+    fn draw(&self, ctx: &mut ContextArgs<G>, params: &DrawAnimationParams) -> Result<()> {
         self.texture.draw(
             ctx,
             &DrawImageParams {
