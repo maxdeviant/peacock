@@ -1,3 +1,6 @@
+use std::ops::Deref;
+use std::ptr::NonNull;
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use lazy_static::*;
@@ -18,6 +21,25 @@ lazy_static! {
     pub(crate) static ref SDL_TTF_CONTEXT: Sdl2TtfContext = sdl2::ttf::init().unwrap();
 }
 
+struct ContextAllocation<G> {
+    data: Vec<u8>,
+    game: G,
+}
+
+#[derive(Clone)]
+pub struct LendedGame<G> {
+    ptr: NonNull<G>,
+    token: Arc<()>,
+}
+
+impl<G> Deref for LendedGame<G> {
+    type Target = G;
+
+    fn deref(&self) -> &Self::Target {
+        unsafe { &*self.ptr.as_ptr() }
+    }
+}
+
 pub struct Context<G> {
     pub(crate) sdl_context: Sdl,
     pub(crate) canvas: Canvas<Window>,
@@ -28,27 +50,22 @@ pub struct Context<G> {
     pub(crate) graphics: GraphicsContext,
     pub(crate) keyboard: KeyboardContext,
     pub(crate) mouse: MouseContext,
-    game: G,
+    allocation: Box<ContextAllocation<G>>,
+    lended_games: Arc<()>,
 }
 
 impl<G> Context<G> {
     /// Returns the game context.
-    pub fn game<'a, 'b>(&'a self) -> &'b G {
-        // Extend the lifetime of the game context so that we can borrow it at
-        // the same time as the rest of the context.
-        //
-        // This *should* be safe because:
-        //   (1) The game context is opaque within Peacock, so nothing in the
-        //       engine will be modifying it,
-        //   (2) the game context is not modifiable externally unless
-        //   (3) the caller obtains a mutable reference with `game_mut`, which
-        //       is then checked by the borrow checker.
-        unsafe { std::mem::transmute::<&'a G, &'b G>(&self.game) }
+    pub fn game(&self) -> LendedGame<G> {
+        LendedGame {
+            ptr: NonNull::from(&self.allocation.game),
+            token: self.lended_games.clone(),
+        }
     }
 
     /// Returns a mutable reference to game context.
     pub fn game_mut(&mut self) -> &mut G {
-        &mut self.game
+        &mut self.allocation.game
     }
 
     /// Runs the context using the provided game state.
@@ -109,7 +126,7 @@ impl<G> Context<G> {
             std::thread::yield_now();
         }
 
-        Ok(())
+        self.shutdown()
     }
 
     /// Runs the context using the game state returned from the provided function.
@@ -139,6 +156,12 @@ impl<G> Context<G> {
         }
 
         Ok(event)
+    }
+
+    fn shutdown(&mut self) -> Result<()> {
+        assert!(Arc::strong_count(&self.lended_games) == 1);
+
+        Ok(())
     }
 }
 
@@ -211,7 +234,11 @@ impl<'a> ContextBuilder<'a> {
             graphics: GraphicsContext::new(),
             keyboard: KeyboardContext::new(),
             mouse: MouseContext::new(),
-            game: (),
+            allocation: Box::new(ContextAllocation {
+                data: Vec::new(),
+                game: (),
+            }),
+            lended_games: Arc::new(()),
         };
 
         let game_ctx = build_game_ctx(&mut ctx)?;
@@ -226,7 +253,11 @@ impl<'a> ContextBuilder<'a> {
             graphics: ctx.graphics,
             keyboard: ctx.keyboard,
             mouse: ctx.mouse,
-            game: game_ctx,
+            allocation: Box::new(ContextAllocation {
+                data: Vec::new(),
+                game: game_ctx,
+            }),
+            lended_games: Arc::new(()),
         })
     }
 
