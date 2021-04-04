@@ -106,6 +106,7 @@ impl<G> Drawable<G> for Image {
 
         let color = params.color.unwrap_or(Color::WHITE);
         texture.set_color_mod(color.r, color.g, color.b);
+        texture.set_alpha_mod(color.a);
 
         ctx.canvas
             .copy(
